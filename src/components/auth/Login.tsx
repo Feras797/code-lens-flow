@@ -30,7 +30,7 @@ export function Login() {
     const { error } = await signIn(signInEmail, signInPassword)
     
     if (error) {
-      setError(error)
+      setError(error.message || 'Failed to sign in')
     }
     
     setIsLoading(false)
@@ -53,10 +53,10 @@ export function Login() {
       return
     }
     
-    const { error } = await signUp(signUpEmail, signUpPassword, signUpFullName)
+    const { error } = await signUp(signUpEmail, signUpPassword)
     
     if (error) {
-      setError(error)
+      setError(error.message || 'Failed to sign up')
     } else {
       setError(null)
       // Show success message

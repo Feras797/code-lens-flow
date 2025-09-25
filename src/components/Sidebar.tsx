@@ -46,8 +46,8 @@ function Sidebar () {
   // Get user initials for avatar fallback
   const getUserInitials = () => {
     if (!user) return 'U'
-    if (user.full_name) {
-      return user.full_name
+    if (user.user_metadata?.full_name) {
+      return user.user_metadata.full_name
         .split(' ')
         .map(n => n[0])
         .join('')

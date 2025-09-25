@@ -10,21 +10,20 @@ import Layout from './components/Layout'
 import { Login } from './components/auth/Login'
 
 function AppContent () {
-  const { user, isLoading } = useAuth()
+  const { session, loading } = useAuth()
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className='min-h-screen flex items-center justify-center'>
+      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800'>
         <div className='text-center'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto'></div>
-          <p className='mt-4 text-muted-foreground'>Loading...</p>
+          <p className='mt-4 text-gray-400'>Loading...</p>
         </div>
       </div>
     )
   }
 
-
-  if (!user) {
+  if (!session) {
     return <Login />
   }
 
@@ -44,11 +43,11 @@ function AppContent () {
 function App () {
   return (
     <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-      <Router>
-        <AuthProvider>
+      <AuthProvider>
+        <Router>
           <AppContent />
-        </AuthProvider>
-      </Router>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
