@@ -2,41 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Lense Design System - Modern Minimal Analytics Platform */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Base colors - bright, clean backgrounds */
+    --background: 0 0% 99%;
+    --foreground: 210 22% 12%;
+    
+    /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --card-foreground: 210 22% 12%;
+    --card-shadow: 210 20% 90%;
+    
+    /* Primary accent - sophisticated blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 55%;
+    
+    /* Status colors for team coordination */
+    --status-flow: 142 69% 58%;      /* Green - in flow */
+    --status-slow: 45 93% 58%;       /* Yellow - slow progress */
+    --status-blocked: 0 84% 60%;     /* Red - blocked */
+    --status-flow-bg: 142 69% 95%;
+    --status-slow-bg: 45 93% 95%;
+    --status-blocked-bg: 0 84% 95%;
+    
+    /* Neutral grays for hierarchy */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 214 32% 91%;
+    --border-hover: 214 32% 85%;
+    
+    /* Interactive elements */
+    --hover-bg: 210 40% 98%;
+    --active-bg: 210 40% 95%;
+    
+    /* Alert and warning colors */
+    --warning: 45 93% 58%;
+    --warning-foreground: 45 93% 15%;
+    --warning-bg: 45 93% 95%;
+    
+    /* Design system spacing and roundness */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-lg: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
