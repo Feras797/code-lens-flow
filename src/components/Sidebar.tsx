@@ -7,9 +7,21 @@ import {
   LayoutDashboard,
   Zap,
   Settings,
-  HelpCircle
+  HelpCircle,
+  LogOut,
+  User
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -25,6 +37,26 @@ const bottomNavigation = [
 ]
 
 function Sidebar () {
+  const { user, signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+  }
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (!user) return 'U'
+    if (user.full_name) {
+      return user.full_name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    }
+    return user.email?.[0]?.toUpperCase() || 'U'
+  }
+
   return (
     <div className='w-64 bg-[hsl(var(--sidebar-background))] border-r border-border flex flex-col'>
       {/* Logo */}
@@ -106,6 +138,48 @@ function Sidebar () {
           </NavLink>
         ))}
       </nav>
+
+      {/* User Profile */}
+      <div className='px-4 py-4 border-t border-border'>
+        <DropdownMenu>
+          <DropdownMenuTrigger className='w-full'>
+            <div className='flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[hsl(var(--hover-bg))] transition-colors cursor-pointer'>
+              <Avatar className='h-8 w-8'>
+                <AvatarImage src={user?.avatar_url || ''} />
+                <AvatarFallback>{getUserInitials()}</AvatarFallback>
+              </Avatar>
+              <div className='flex-1 text-left'>
+                <p className='text-sm font-medium text-foreground'>
+                  {user?.full_name || 'User'}
+                </p>
+                <p className='text-xs text-muted-foreground truncate'>
+                  {user?.email}
+                </p>
+              </div>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-56'>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className='gap-2'>
+              <User className='h-4 w-4' />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className='gap-2'>
+              <Settings className='h-4 w-4' />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className='gap-2 text-destructive focus:text-destructive'
+              onClick={handleSignOut}
+            >
+              <LogOut className='h-4 w-4' />
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   )
 }
