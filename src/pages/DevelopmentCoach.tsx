@@ -80,30 +80,6 @@ function DevelopmentCoach () {
         </p>
       </div>
 
-      {/* Progress Overview */}
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-4'>
-            <Target className='h-5 w-5 text-primary' />
-            <span className='text-2xl font-bold text-foreground'>{progress.patternsImproved}</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Patterns Improved This Week</p>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-4'>
-            <TrendingUp className='h-5 w-5 text-status-flow' />
-            <span className='text-2xl font-bold text-foreground'>{progress.timeSaved}</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Time Saved</p>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-4'>
-            <Brain className='h-5 w-5 text-[hsl(var(--accent))]' />
-            <span className='text-2xl font-bold text-foreground'>{progress.weeklyProgress}%</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Weekly Progress</p>
-        </div>
-      </div>
 
       {/* Anti-Patterns */}
       <div className='bg-card border border-border rounded-xl p-6'>

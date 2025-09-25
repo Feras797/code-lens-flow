@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Users,
   AlertTriangle,
@@ -9,12 +10,13 @@ import {
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import TeamActivityChart from '@/components/dashboard/TeamActivityChart'
 import RecentCollisions from '@/components/dashboard/RecentCollisions'
-import DeveloperStatus from '@/components/dashboard/DeveloperStatus'
 import { MetricCard } from '@/components/dashboard/MetricCard'
 
 function Dashboard () {
+  const [activeTab, setActiveTab] = useState('resolve')
 
   return (
     <div className='p-6 space-y-6'>
@@ -74,9 +76,18 @@ function Dashboard () {
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <Button
           variant="outline"
-          className='h-auto p-4 justify-start gap-3 bg-primary/5 hover:bg-primary/10 border-primary/20 group'
+          onClick={() => setActiveTab('resolve')}
+          className={cn(
+            'h-auto p-4 justify-start gap-3 group transition-all duration-200',
+            activeTab === 'resolve'
+              ? 'bg-blue-500/10 border-blue-500/50 text-blue-600 shadow-md hover:bg-blue-500/15 hover:border-blue-500/60'
+              : 'hover:border-blue-400/40 hover:bg-blue-500/5'
+          )}
         >
-          <Zap className='h-5 w-5 text-primary group-hover:scale-110 transition-transform' />
+          <Zap className={cn(
+            'h-5 w-5 group-hover:scale-110 transition-transform',
+            activeTab === 'resolve' ? 'text-blue-500' : 'text-primary'
+          )} />
           <div className='text-left'>
             <p className='text-sm font-medium text-foreground'>Resolve Collision</p>
             <p className='text-xs text-muted-foreground'>3 active conflicts</p>
@@ -84,9 +95,20 @@ function Dashboard () {
         </Button>
         <Button
           variant="outline"
-          className='h-auto p-4 justify-start gap-3 group'
+          onClick={() => setActiveTab('insights')}
+          className={cn(
+            'h-auto p-4 justify-start gap-3 group transition-all duration-200',
+            activeTab === 'insights'
+              ? 'bg-blue-500/10 border-blue-500/50 text-blue-600 shadow-md hover:bg-blue-500/15 hover:border-blue-500/60'
+              : 'hover:border-blue-400/40 hover:bg-blue-500/5'
+          )}
         >
-          <Activity className='h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors' />
+          <Activity className={cn(
+            'h-5 w-5 transition-colors',
+            activeTab === 'insights'
+              ? 'text-blue-500'
+              : 'text-muted-foreground group-hover:text-primary'
+          )} />
           <div className='text-left'>
             <p className='text-sm font-medium text-foreground'>View Insights</p>
             <p className='text-xs text-muted-foreground'>Personal patterns</p>
@@ -94,9 +116,20 @@ function Dashboard () {
         </Button>
         <Button
           variant="outline"
-          className='h-auto p-4 justify-start gap-3 group'
+          onClick={() => setActiveTab('knowledge')}
+          className={cn(
+            'h-auto p-4 justify-start gap-3 group transition-all duration-200',
+            activeTab === 'knowledge'
+              ? 'bg-blue-500/10 border-blue-500/50 text-blue-600 shadow-md hover:bg-blue-500/15 hover:border-blue-500/60'
+              : 'hover:border-blue-400/40 hover:bg-blue-500/5'
+          )}
         >
-          <GitBranch className='h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors' />
+          <GitBranch className={cn(
+            'h-5 w-5 transition-colors',
+            activeTab === 'knowledge'
+              ? 'text-blue-500'
+              : 'text-muted-foreground group-hover:text-primary'
+          )} />
           <div className='text-left'>
             <p className='text-sm font-medium text-foreground'>Knowledge Base</p>
             <p className='text-xs text-muted-foreground'>47 solutions available</p>
@@ -117,8 +150,6 @@ function Dashboard () {
         </div>
       </div>
 
-      {/* Developer Status Grid */}
-      <DeveloperStatus />
 
     </div>
   )

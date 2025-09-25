@@ -26,11 +26,11 @@ export function MetricCard({
   const getVariantStyles = () => {
     switch (variant) {
       case 'warning':
-        return 'border-status-slow/20 bg-status-slow/5'
+        return 'border-status-slow/20'
       case 'success':
-        return 'border-status-flow/20 bg-status-flow/5'
+        return 'border-status-flow/20'
       case 'destructive':
-        return 'border-status-blocked/20 bg-status-blocked/5'
+        return 'border-status-blocked/20'
       default:
         return 'border-border'
     }

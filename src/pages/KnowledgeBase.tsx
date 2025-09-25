@@ -114,30 +114,6 @@ function KnowledgeBase () {
         </p>
       </div>
 
-      {/* Knowledge Impact Stats */}
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-2'>
-            <CheckCircle className='h-5 w-5 text-status-flow' />
-            <span className='text-2xl font-bold text-status-flow'>{knowledgeImpact.problemsSolved}</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Problems Solved</p>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-2'>
-            <Clock className='h-5 w-5 text-blue-500' />
-            <span className='text-2xl font-bold text-blue-500'>{knowledgeImpact.timeSavedTeamWide}</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Time Saved Team-Wide</p>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-6'>
-          <div className='flex items-center justify-between mb-2'>
-            <GitBranch className='h-5 w-5 text-[hsl(var(--accent))]' />
-            <span className='text-2xl font-bold text-[hsl(var(--accent))]'>{knowledgeImpact.knowledgeTransfers}</span>
-          </div>
-          <p className='text-sm text-muted-foreground'>Knowledge Transfers</p>
-        </div>
-      </div>
 
       {/* Problem-Solution Mapping */}
       <div className='bg-card border border-border rounded-xl p-6'>
