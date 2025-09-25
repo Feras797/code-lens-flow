@@ -7,7 +7,6 @@ type AuthContextType = {
   user: AuthUser | null
   session: Session | null
   isLoading: boolean
-  initError: string | null
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
@@ -28,7 +27,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [initError, setInitError] = useState<string | null>(null)
 
   // Fetch user data
   const fetchUser = async () => {
@@ -40,11 +38,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        // Check if Supabase is properly initialized
-        if (!supabase) {
-          throw new Error('Supabase client not initialized')
-        }
-        
         // Get initial session
         const { data: { session: initialSession } } = await supabase.auth.getSession()
         setSession(initialSession)
@@ -54,7 +47,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } catch (error) {
         console.error('Error initializing auth:', error)
-        setInitError(error instanceof Error ? error.message : 'Failed to initialize authentication')
       } finally {
         setIsLoading(false)
       }
@@ -62,30 +54,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     initAuth()
     
-    // Listen for auth changes (only if Supabase is properly initialized)
-    let subscription: any = null
-    try {
-      const authSubscription = supabase.auth.onAuthStateChange(
-        async (event, currentSession) => {
-          console.log('Auth state changed:', event)
-          setSession(currentSession)
-          
-          if (currentSession) {
-            await fetchUser()
-          } else {
-            setUser(null)
-          }
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, currentSession) => {
+        console.log('Auth state changed:', event)
+        setSession(currentSession)
+        
+        if (currentSession) {
+          await fetchUser()
+        } else {
+          setUser(null)
         }
-      )
-      subscription = authSubscription.data.subscription
-    } catch (error) {
-      console.error('Could not set up auth listener:', error)
-    }
+      }
+    )
     
     return () => {
-      if (subscription) {
-        subscription.unsubscribe()
-      }
+      subscription.unsubscribe()
     }
   }, [])
 
@@ -169,7 +153,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     session,
     isLoading,
-    initError,
     signIn,
     signUp,
     signOut,

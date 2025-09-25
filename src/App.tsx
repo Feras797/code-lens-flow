@@ -10,7 +10,7 @@ import Layout from './components/Layout'
 import { Login } from './components/auth/Login'
 
 function AppContent () {
-  const { user, isLoading, initError } = useAuth()
+  const { user, isLoading } = useAuth()
 
   if (isLoading) {
     return (
@@ -23,36 +23,6 @@ function AppContent () {
     )
   }
 
-  if (initError) {
-    return (
-      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50'>
-        <div className='max-w-md w-full p-6 bg-white rounded-lg shadow-lg'>
-          <h2 className='text-2xl font-bold text-red-600 mb-4'>Configuration Error</h2>
-          <p className='text-gray-700 mb-4'>{initError}</p>
-          <div className='bg-gray-100 p-4 rounded-md'>
-            <h3 className='font-semibold mb-2'>To fix this:</h3>
-            <ol className='list-decimal list-inside space-y-2 text-sm'>
-              <li>Create a <code className='bg-gray-200 px-1 rounded'>.env</code> file in your project root</li>
-              <li>Add your Supabase credentials:
-                <pre className='bg-gray-200 p-2 mt-2 rounded text-xs overflow-x-auto'>
-{`VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_anon_key`}
-                </pre>
-              </li>
-              <li>Get these values from your Supabase dashboard under Settings → API</li>
-              <li>Restart the development server after adding the .env file</li>
-            </ol>
-          </div>
-          <button 
-            onClick={() => window.location.reload()} 
-            className='mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors'
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   if (!user) {
     return <Login />
