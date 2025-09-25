@@ -56,6 +56,15 @@ export function DevelopmentCoach() {
 
   return (
     <div className="space-y-8">
+      {/* Feature Header */}
+      <div className="bg-card rounded-lg border p-4">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
+          Development Coach
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Identify and fix your personal anti-patterns based on chat analysis
+        </p>
+      </div>
       {/* Progress Overview */}
       <section>
         <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">

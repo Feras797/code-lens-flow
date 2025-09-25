@@ -71,11 +71,40 @@ export function Coordination({ project }: CoordinationProps) {
 
   return (
     <div className="space-y-8">
-      {/* Active Suggestions */}
-      <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4">
-          Coordination Suggestions
+      {/* Feature Header */}
+      <div className="bg-card rounded-lg border p-4">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
+          Collision Detection & Smart Coordination
         </h2>
+        <p className="text-sm text-muted-foreground">
+          Prevents duplicate work and conflicts by analyzing what files and features each developer mentions
+        </p>
+      </div>
+
+      {/* Active Warnings Section */}
+      <section>
+        <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-warning" />
+          Active Warnings
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-warning-bg border border-warning/20 rounded-lg p-3 text-center">
+            <div className="font-medium text-warning-foreground">File-level Collisions</div>
+            <div className="text-xs text-warning-foreground opacity-75">Two people editing same file</div>
+          </div>
+          <div className="bg-muted border rounded-lg p-3 text-center">
+            <div className="font-medium text-muted-foreground">Feature Overlaps</div>
+            <div className="text-xs text-muted-foreground">Related functionality conflicts</div>
+          </div>
+          <div className="bg-muted border rounded-lg p-3 text-center">
+            <div className="font-medium text-muted-foreground">Dependency Chains</div>
+            <div className="text-xs text-muted-foreground">Work blocking other tasks</div>
+          </div>
+        </div>
+
+        <h3 className="text-lg font-semibold text-foreground mb-4">
+          Intelligent Work Distribution
+        </h3>
         
         <div className="space-y-4">
           {suggestions.map((suggestion) => (

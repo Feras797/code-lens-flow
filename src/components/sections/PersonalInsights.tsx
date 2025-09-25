@@ -28,6 +28,15 @@ export function PersonalInsights() {
 
   return (
     <div className="space-y-8">
+      {/* Feature Header */}
+      <div className="bg-card rounded-lg border p-4">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
+          Personal Development Insights
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Transform chat history into actionable understanding of your coding journey
+        </p>
+      </div>
       {/* Today's Development Recap */}
       <section>
         <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">

@@ -32,8 +32,13 @@ export function Dashboard({ onProjectSelect }: DashboardProps) {
             <div>
               <h1 className="text-3xl font-bold text-foreground">Lense Analytics</h1>
               <p className="text-muted-foreground mt-1">
-                AI-powered development team coordination
+                AI-powered development team coordination through Claude Code chat analysis
               </p>
+              
+              {/* Core Data Model Explanation */}
+              <div className="mt-3 text-sm bg-primary/5 text-primary px-3 py-2 rounded-lg inline-block">
+                Extracts semantic understanding from isolated conversations to reconstruct team dynamics
+              </div>
             </div>
             
             <div className="flex items-center gap-4">

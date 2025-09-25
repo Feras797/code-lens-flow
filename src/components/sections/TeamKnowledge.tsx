@@ -131,11 +131,45 @@ export function TeamKnowledge() {
 
   return (
     <div className="space-y-8">
-      {/* Problem-Solution Directory */}
-      <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4">
-          Problem-Solution Directory
+      {/* Feature Header */}
+      <div className="bg-card rounded-lg border p-4">
+        <h2 className="text-lg font-semibold text-foreground mb-2">
+          Team Knowledge Base
         </h2>
+        <p className="text-sm text-muted-foreground">
+          Automatically build collective intelligence from individual conversations
+        </p>
+      </div>
+      {/* Problem-Solution Mapping Header */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-foreground">
+            Problem-Solution Mapping
+          </h3>
+          <div className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full">
+            Common Struggles Identified
+          </div>
+        </div>
+        
+        <div className="bg-muted/50 border rounded-lg p-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <div className="font-medium text-foreground">PostgreSQL pooling</div>
+              <div className="text-muted-foreground">3 people, 4 hours wasted</div>
+              <div className="text-primary">→ Mike's solution available</div>
+            </div>
+            <div>
+              <div className="font-medium text-foreground">JWT refresh tokens</div>
+              <div className="text-muted-foreground">3 people struggled</div>
+              <div className="text-primary">→ Sarah found the answer</div>
+            </div>
+            <div>
+              <div className="font-medium text-foreground">React optimization</div>
+              <div className="text-muted-foreground">Repeated issue</div>
+              <div className="text-primary">→ Your solution helped Emma</div>
+            </div>
+          </div>
+        </div>
         
         {/* Search */}
         <div className="relative mb-6">
@@ -224,11 +258,28 @@ export function TeamKnowledge() {
         )}
       </section>
 
-      {/* Team Expertise Matrix */}
+      {/* Team Expertise Matrix with Smart Pairing */}
       <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4">
-          Team Expertise Matrix
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-foreground">
+            Team Expertise Matrix & Smart Pairing
+          </h3>
+          <div className="text-sm bg-status-flow/10 text-status-flow px-3 py-1 rounded-full">
+            Optimal pair programming suggestions
+          </div>
+        </div>
+        
+        <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
+          <h4 className="font-medium text-primary mb-2">Smart Pairing Suggestions</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div>
+              <span className="font-medium">Current Blockers:</span> John (Stripe) + Mike (Database expertise)
+            </div>
+            <div>
+              <span className="font-medium">Knowledge Transfer:</span> Sarah (Auth) + You (Analytics integration)
+            </div>
+          </div>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {teamExpertise.map((member) => (
