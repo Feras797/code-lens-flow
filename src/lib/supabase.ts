@@ -213,18 +213,33 @@ export type Database = {
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// Create a dummy client that will fail gracefully if credentials are missing
+let supabaseClient: any = null
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables. Please check your .env file.')
+  console.error('Missing Supabase environment variables!')
+  console.error('Please create a .env file in the root directory with:')
+  console.error('VITE_SUPABASE_URL=your_supabase_url')
+  console.error('VITE_SUPABASE_ANON_KEY=your_anon_key')
+  
+  // Create a mock client that will throw errors when accessed
+  supabaseClient = new Proxy({}, {
+    get: () => {
+      throw new Error('Supabase client not initialized. Please configure your .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY')
+    }
+  })
+} else {
+  // Create real Supabase client
+  supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  })
 }
 
-// Create Supabase client
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true
-  }
-})
+export const supabase = supabaseClient
 
 // Helper function to handle Supabase errors
 export function handleSupabaseError(error: any) {

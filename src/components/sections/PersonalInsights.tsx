@@ -158,8 +158,8 @@ export function PersonalInsights() {
                   insight.type === 'productivity' ? 'bg-primary/10' :
                   'bg-status-slow-bg'
                 }`}>
-                  {insight.type === 'pattern' ? '🔄' : 
-                   insight.type === 'productivity' ? '⚡' : '🎯'}
+                  {insight.type === 'pattern' ? 'R' : 
+                   insight.type === 'productivity' ? 'P' : 'T'}
                 </div>
                 <h4 className="font-medium text-foreground text-sm">
                   {insight.title}

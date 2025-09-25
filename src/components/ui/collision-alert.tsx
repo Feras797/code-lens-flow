@@ -108,7 +108,7 @@ const CollisionAlert = React.forwardRef<HTMLDivElement, CollisionAlertProps>(
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className={cn("font-semibold", config.text)}>
-                    ⚠️ {typeInfo.label.toUpperCase()}
+                    {typeInfo.label.toUpperCase()}
                   </h3>
                   <span className={cn(
                     "px-2 py-1 rounded-full text-xs font-medium uppercase",

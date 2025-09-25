@@ -17,9 +17,9 @@ function PersonalInsights () {
   ]
 
   const patterns = [
-    { icon: '🌅', title: 'Morning Frontend Focus', desc: 'You typically spend mornings on frontend tasks with 40% higher productivity' },
-    { icon: '⚡', title: 'Productivity Peak', desc: 'Your productivity peaks between 2-4 PM with fastest problem resolution' },
-    { icon: '🔄', title: 'Context Switching Cost', desc: 'You lose 25 minutes of productivity when switching between frontend and backend tasks' }
+    { icon: 'Sun', title: 'Morning Frontend Focus', desc: 'You typically spend mornings on frontend tasks with 40% higher productivity' },
+    { icon: 'Zap', title: 'Productivity Peak', desc: 'Your productivity peaks between 2-4 PM with fastest problem resolution' },
+    { icon: 'RefreshCw', title: 'Context Switching Cost', desc: 'You lose 25 minutes of productivity when switching between frontend and backend tasks' }
   ]
 
   return (
