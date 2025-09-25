@@ -12,16 +12,6 @@ import {
   User
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useAuth } from '@/contexts/AuthContext'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -37,10 +27,11 @@ const bottomNavigation = [
 ]
 
 function Sidebar () {
-  const { user, signOut } = useAuth()
+  const user = { full_name: 'Vishi Choudhary', email: 'vishi@example.com' }
 
-  const handleSignOut = async () => {
-    await signOut()
+  const handleSignOut = () => {
+    // Mock sign out for now
+    console.log('Sign out clicked')
   }
 
   // Get user initials for avatar fallback
@@ -141,44 +132,19 @@ function Sidebar () {
 
       {/* User Profile */}
       <div className='px-4 py-4 border-t border-border'>
-        <DropdownMenu>
-          <DropdownMenuTrigger className='w-full'>
-            <div className='flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[hsl(var(--hover-bg))] transition-colors cursor-pointer'>
-              <Avatar className='h-8 w-8'>
-                <AvatarImage src={user?.avatar_url || ''} />
-                <AvatarFallback>{getUserInitials()}</AvatarFallback>
-              </Avatar>
-              <div className='flex-1 text-left'>
-                <p className='text-sm font-medium text-foreground'>
-                  {user?.full_name || 'User'}
-                </p>
-                <p className='text-xs text-muted-foreground truncate'>
-                  {user?.email}
-                </p>
-              </div>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='w-56'>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className='gap-2'>
-              <User className='h-4 w-4' />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem className='gap-2'>
-              <Settings className='h-4 w-4' />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem 
-              className='gap-2 text-destructive focus:text-destructive'
-              onClick={handleSignOut}
-            >
-              <LogOut className='h-4 w-4' />
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className='flex items-center gap-3 px-3 py-2 rounded-lg'>
+          <div className='h-8 w-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-medium text-sm'>
+            {getUserInitials()}
+          </div>
+          <div className='flex-1 text-left'>
+            <p className='text-sm font-medium text-foreground'>
+              {user?.full_name || 'User'}
+            </p>
+            <p className='text-xs text-muted-foreground truncate'>
+              {user?.email}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )

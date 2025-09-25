@@ -20,6 +20,7 @@ export interface Project {
   lastRefresh: string;
   hasCollisions: boolean;
   developers: Developer[];
+  lastUpdate: string;
 }
 
 export interface Collision {

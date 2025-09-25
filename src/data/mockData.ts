@@ -54,7 +54,8 @@ export const mockProjects: Project[] = [
         duration: '1 hr',
         fileName: 'auth.js'
       }
-    ]
+    ],
+    lastUpdate: "2024-01-20T14:30:00Z"
   },
   {
     id: '2',
@@ -88,7 +89,8 @@ export const mockProjects: Project[] = [
         status: 'flow',
         duration: '45 min'
       }
-    ]
+    ],
+    lastUpdate: "2024-01-22T09:15:00Z"
   },
   {
     id: '3',
@@ -130,7 +132,8 @@ export const mockProjects: Project[] = [
         status: 'flow',
         duration: '1.5 hrs'
       }
-    ]
+    ],
+    lastUpdate: "2024-01-27T16:45:00Z"
   }
 ];
 

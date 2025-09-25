@@ -2,6 +2,7 @@ import { ArrowRight, CheckCircle, AlertTriangle, Users, Clock, Settings, Zap } f
 import { PremiumButton } from '@/components/ui/premium-button';
 import { StealthCard } from '@/components/ui/stealth-card';
 import { StatusIndicator, StatusBadge } from '@/components/ui/status-indicator';
+import { Button } from '@/components/ui/button';
 import { Project } from '@/types';
 
 interface CoordinationProps {
