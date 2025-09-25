@@ -1,12 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ProjectProvider } from './contexts/ProjectContext'
 import Dashboard from './pages/Dashboard'
 import TeamStatus from './pages/TeamStatus'
 import PersonalInsights from './pages/PersonalInsights'
 import DevelopmentCoach from './pages/DevelopmentCoach'
 import KnowledgeBase from './pages/KnowledgeBase'
-import Layout from './components/Layout'
+import ProjectSelector from './pages/ProjectSelector'
+import AppLayout from './components/layouts/AppLayout'
+import ProjectLayout from './components/layouts/ProjectLayout'
 import { Login } from './components/auth/Login'
 
 function AppContent () {
@@ -29,12 +32,23 @@ function AppContent () {
 
   return (
     <Routes>
-      <Route path='/' element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path='team-status' element={<TeamStatus />} />
-        <Route path='insights' element={<PersonalInsights />} />
-        <Route path='coach' element={<DevelopmentCoach />} />
-        <Route path='knowledge' element={<KnowledgeBase />} />
+      {/* Redirect root to projects */}
+      <Route path="/" element={<Navigate to="/projects" replace />} />
+
+      {/* App-level routes (with sidebar) */}
+      <Route path="/" element={<AppLayout />}>
+        <Route path="projects" element={<ProjectSelector />} />
+      </Route>
+
+      {/* Project-specific routes (with top navigation) */}
+      <Route path="/project/:projectId" element={<ProjectLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="team-status" element={<TeamStatus />} />
+        <Route path="insights" element={<PersonalInsights />} />
+        <Route path="coach" element={<DevelopmentCoach />} />
+        <Route path="knowledge" element={<KnowledgeBase />} />
+        {/* Redirect project root to dashboard */}
+        <Route index element={<Navigate to="dashboard" replace />} />
       </Route>
     </Routes>
   )
@@ -44,9 +58,11 @@ function App () {
   return (
     <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
       <AuthProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <ProjectProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </ProjectProvider>
       </AuthProvider>
     </ThemeProvider>
   )

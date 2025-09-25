@@ -24,11 +24,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Team Status', href: '/team-status', icon: Users },
-  { name: 'Personal Insights', href: '/insights', icon: Activity },
-  { name: 'Development Coach', href: '/coach', icon: Brain },
-  { name: 'Knowledge Base', href: '/knowledge', icon: BookOpen }
+  { name: 'Projects', href: '/projects', icon: LayoutDashboard }
 ]
 
 const bottomNavigation = [
