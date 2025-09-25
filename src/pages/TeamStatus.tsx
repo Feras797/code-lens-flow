@@ -521,16 +521,6 @@ function TeamStatus () {
         </div>
       </div>
 
-      {/* Smart Assistance */}
-      <div className='bg-card border border-border rounded-xl p-6'>
-        <h3 className='text-sm font-semibold text-foreground mb-2 flex items-center gap-2'>
-          <Activity className='h-4 w-4 text-muted-foreground' />
-          Smart Assistance
-        </h3>
-        <p className='text-sm text-muted-foreground'>
-          When someone is stuck, the system identifies similar problems solved by teammates and suggests connections
-        </p>
-      </div>
     </div>
   )
 }

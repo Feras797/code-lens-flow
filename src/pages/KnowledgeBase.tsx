@@ -1,4 +1,4 @@
-import { Search, Users, Clock, CheckCircle, GitBranch, BookOpen, Zap } from 'lucide-react'
+import { Search, Users, Clock, Zap } from 'lucide-react'
 import { useState } from 'react'
 
 function KnowledgeBase () {
@@ -48,61 +48,6 @@ function KnowledgeBase () {
     }
   ]
 
-  const teamExperts = [
-    {
-      name: 'Sarah Chen',
-      avatar: 'SC',
-      skills: [
-        { name: 'React', level: 12 },
-        { name: 'TypeScript', level: 8 },
-        { name: 'Authentication', level: 6 },
-        { name: 'Testing', level: 4 }
-      ]
-    },
-    {
-      name: 'Mike Thompson',
-      avatar: 'MT',
-      skills: [
-        { name: 'PostgreSQL', level: 15 },
-        { name: 'Node.js', level: 10 },
-        { name: 'Performance', level: 7 },
-        { name: 'DevOps', level: 5 }
-      ]
-    },
-    {
-      name: 'Emma Davis',
-      avatar: 'ED',
-      skills: [
-        { name: 'API Design', level: 11 },
-        { name: 'Stripe', level: 6 },
-        { name: 'Microservices', level: 8 },
-        { name: 'Docker', level: 4 }
-      ]
-    },
-    {
-      name: 'You',
-      avatar: 'YU',
-      skills: [
-        { name: 'React', level: 9 },
-        { name: 'UI/UX', level: 12 },
-        { name: 'Analytics', level: 7 },
-        { name: 'Optimization', level: 5 }
-      ]
-    }
-  ]
-
-  const knowledgeImpact = {
-    problemsSolved: 24,
-    timeSavedTeamWide: '18h',
-    knowledgeTransfers: 9
-  }
-
-  const getSkillColor = (level: number) => {
-    if (level >= 10) return 'bg-status-flow'
-    if (level >= 6) return 'bg-primary'
-    if (level >= 3) return 'bg-status-slow'
-    return 'bg-muted'
-  }
 
   return (
     <div className='p-6 space-y-6'>
@@ -197,62 +142,6 @@ function KnowledgeBase () {
         </div>
       </div>
 
-      {/* Team Expertise Matrix */}
-      <div className='bg-card border border-border rounded-xl p-6'>
-        <div className='flex items-center justify-between mb-4'>
-          <h2 className='text-lg font-semibold text-foreground'>Team Expertise Matrix & Smart Pairing</h2>
-          <button className='text-xs text-primary hover:text-primary/80'>
-            Optimal pair programming suggestions
-          </button>
-        </div>
-        
-        {/* Smart Pairing Suggestions */}
-        <div className='bg-primary/5 border border-primary/20 rounded-lg p-3 mb-6'>
-          <h3 className='text-sm font-medium text-primary mb-2'>Smart Pairing Suggestions</h3>
-          <p className='text-xs text-muted-foreground mb-2'>
-            Current Blockers: John (Stripe) + Mike (Database expertise)
-          </p>
-          <p className='text-xs text-muted-foreground'>
-            Knowledge Transfer: Sarah (Auth) + You (Analytics integration)
-          </p>
-        </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {teamExperts.map((expert, index) => (
-            <div key={index} className='bg-background/50 border border-border rounded-lg p-4'>
-              <div className='flex items-center gap-3 mb-3'>
-                <div className='h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium'>
-                  {expert.avatar}
-                </div>
-                <h3 className='text-sm font-medium text-foreground'>{expert.name}</h3>
-              </div>
-              <div className='space-y-2'>
-                {expert.skills.map((skill, i) => (
-                  <div key={i} className='flex items-center gap-2'>
-                    <BookOpen className='h-3 w-3 text-muted-foreground' />
-                    <span className='text-xs text-muted-foreground flex-1'>{skill.name}</span>
-                    <div className='flex gap-1'>
-                      {[...Array(5)].map((_, idx) => (
-                        <div
-                          key={idx}
-                          className={`h-1.5 w-6 rounded-full ${
-                            idx < Math.ceil(skill.level / 3)
-                              ? getSkillColor(skill.level)
-                              : 'bg-muted'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className='text-xs text-muted-foreground ml-1'>
-                      {skill.level} examples
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }

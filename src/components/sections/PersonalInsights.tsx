@@ -1,5 +1,4 @@
-import { Clock, TrendingUp, Focus, BarChart3 } from 'lucide-react';
-import { mockInsights } from '@/data/mockData';
+import { Clock, GitCommit, Code, Bug, Settings, Database } from 'lucide-react';
 
 export function PersonalInsights() {
   const todaysSummary = {
@@ -12,18 +11,61 @@ export function PersonalInsights() {
     abandoned: 'Custom chart solution (too time-consuming)'
   };
 
-  const focusShifts = [
-    { period: 'Week 1', focus: 'Basic setup and components', progress: 100 },
-    { period: 'Week 2', focus: 'Feature implementation', progress: 100 },
-    { period: 'Week 3', focus: 'State management and optimization', progress: 85 },
-    { period: 'Current', focus: 'Polish and scale', progress: 45 }
-  ];
-
-  const timeDistribution = [
-    { area: 'Frontend Components', hours: 12, percentage: 40 },
-    { area: 'State Management', hours: 8, percentage: 27 },
-    { area: 'API Integration', hours: 6, percentage: 20 },
-    { area: 'Testing & Debug', hours: 4, percentage: 13 }
+  const developmentTimeline = [
+    {
+      date: '2025-01-15',
+      time: '09:30',
+      type: 'feature',
+      title: 'Started user authentication system',
+      description: 'Initial setup with Supabase integration for auth flows',
+      icon: Settings,
+      impact: 'high'
+    },
+    {
+      date: '2025-01-15',
+      time: '11:15',
+      type: 'code',
+      title: 'Implemented React.memo optimization',
+      description: 'Optimized user profile component rendering performance',
+      icon: Code,
+      impact: 'medium'
+    },
+    {
+      date: '2025-01-15',
+      time: '14:20',
+      type: 'decision',
+      title: 'Switched from Chart.js to Recharts',
+      description: 'Better TypeScript support and React integration for dashboard charts',
+      icon: GitCommit,
+      impact: 'high'
+    },
+    {
+      date: '2025-01-15',
+      time: '15:45',
+      type: 'bug',
+      title: 'Fixed state management issue',
+      description: 'Resolved prop drilling problems by implementing Context API',
+      icon: Bug,
+      impact: 'high'
+    },
+    {
+      date: '2025-01-15',
+      time: '16:30',
+      type: 'database',
+      title: 'Deferred complex filtering to backend',
+      description: 'Performance optimization by moving heavy operations server-side',
+      icon: Database,
+      impact: 'medium'
+    },
+    {
+      date: '2025-01-15',
+      time: '17:15',
+      type: 'abandoned',
+      title: 'Abandoned custom chart solution',
+      description: 'Too time-consuming, decided to use existing library instead',
+      icon: Code,
+      impact: 'low'
+    }
   ];
 
   return (
@@ -75,101 +117,82 @@ export function PersonalInsights() {
         </div>
       </section>
 
-      {/* Project Focus Shifts */}
+      {/* Development Timeline */}
       <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" />
-          Project Focus Evolution
+        <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
+          <GitCommit className="w-5 h-5" />
+          Development Timeline
         </h2>
-        
-        <div className="space-y-3">
-          {focusShifts.map((shift, index) => (
-            <div key={index} className="bg-card rounded-lg border p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <span className="font-medium text-foreground">{shift.period}</span>
-                  <span className="text-sm text-muted-foreground ml-2">
-                    {shift.focus}
-                  </span>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {shift.progress}%
-                </span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div
-                  className="bg-primary h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${shift.progress}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Time Distribution */}
-      <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
-          Time Distribution This Week
-        </h2>
-        
-        <div className="bg-card rounded-lg border p-6">
-          <div className="space-y-4">
-            {timeDistribution.map((item, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-full">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-foreground">
-                        {item.area}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {item.hours}h ({item.percentage}%)
-                      </span>
-                    </div>
-                    <div className="w-64 bg-muted rounded-full h-2">
-                      <div
-                        className="bg-primary h-2 rounded-full"
-                        style={{ width: `${item.percentage}%` }}
-                      ></div>
+        <div className="relative">
+          {/* Timeline line */}
+          <div className="absolute left-8 top-0 bottom-0 w-px bg-border"></div>
+
+          <div className="space-y-6">
+            {developmentTimeline.map((event, index) => {
+              const IconComponent = event.icon;
+              return (
+                <div key={index} className="relative flex items-start gap-4">
+                  {/* Timeline dot */}
+                  <div className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 ${
+                    event.impact === 'high' ? 'bg-green-500/10 border-green-500 text-green-500' :
+                    event.impact === 'medium' ? 'bg-blue-500/10 border-blue-500 text-blue-500' :
+                    'bg-gray-500/10 border-gray-500 text-gray-500'
+                  }`}>
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+
+                  {/* Event content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="bg-card rounded-lg border p-4 shadow-sm">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h4 className="font-medium text-foreground text-sm mb-1">
+                            {event.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mb-2">
+                            {event.description}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end text-xs text-muted-foreground">
+                          <span>{event.time}</span>
+                          <span className={`mt-1 px-2 py-1 rounded text-xs ${
+                            event.type === 'feature' ? 'bg-blue-500/10 text-blue-500' :
+                            event.type === 'code' ? 'bg-green-500/10 text-green-500' :
+                            event.type === 'decision' ? 'bg-purple-500/10 text-purple-500' :
+                            event.type === 'bug' ? 'bg-red-500/10 text-red-500' :
+                            event.type === 'database' ? 'bg-orange-500/10 text-orange-500' :
+                            'bg-gray-500/10 text-gray-500'
+                          }`}>
+                            {event.type}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Impact indicator */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">Impact:</span>
+                        <div className="flex gap-1">
+                          {[1, 2, 3].map((level) => (
+                            <div
+                              key={level}
+                              className={`w-2 h-2 rounded-full ${
+                                (event.impact === 'high' && level <= 3) ||
+                                (event.impact === 'medium' && level <= 2) ||
+                                (event.impact === 'low' && level <= 1)
+                                  ? 'bg-primary'
+                                  : 'bg-muted'
+                              }`}
+                            ></div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-      </section>
-
-      {/* Personal Insights */}
-      <section>
-        <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Focus className="w-5 h-5" />
-          Pattern Recognition
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockInsights.map((insight) => (
-            <div key={insight.id} className="bg-card rounded-lg border p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  insight.type === 'pattern' ? 'bg-status-flow-bg' :
-                  insight.type === 'productivity' ? 'bg-primary/10' :
-                  'bg-status-slow-bg'
-                }`}>
-                  {insight.type === 'pattern' ? 'R' : 
-                   insight.type === 'productivity' ? 'P' : 'T'}
-                </div>
-                <h4 className="font-medium text-foreground text-sm">
-                  {insight.title}
-                </h4>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {insight.description}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
     </div>
