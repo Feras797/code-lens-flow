@@ -1,5 +1,7 @@
-import { ArrowRight, CheckCircle, AlertTriangle, Users, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight, CheckCircle, AlertTriangle, Users, Clock, Settings, Zap } from 'lucide-react';
+import { PremiumButton } from '@/components/ui/premium-button';
+import { StealthCard } from '@/components/ui/stealth-card';
+import { StatusIndicator, StatusBadge } from '@/components/ui/status-indicator';
 import { Project } from '@/types';
 
 interface CoordinationProps {

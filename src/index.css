@@ -2,105 +2,213 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Lense Design System - Modern Minimal Analytics Platform */
+/* Lense Analytics - Stealth Black UI System */
 
 @layer base {
   :root {
-    /* Base colors - bright, clean backgrounds */
-    --background: 0 0% 99%;
-    --foreground: 210 22% 12%;
-    
-    /* Cards and surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 210 22% 12%;
-    --card-shadow: 210 20% 90%;
-    
-    /* Primary accent - sophisticated blue */
-    --primary: 217 91% 60%;
+    /* Stealth Black Foundation */
+    --background: 0 0% 3%;              /* Pure stealth black */
+    --background-subtle: 0 0% 6%;       /* Slightly lighter black */
+    --background-card: 0 0% 8%;         /* Card backgrounds */
+    --foreground: 0 0% 98%;             /* High contrast white */
+    --foreground-muted: 0 0% 65%;       /* Muted text */
+    --foreground-subtle: 0 0% 45%;      /* Subtle text */
+
+    /* Glass Morphism & Surfaces */
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+    --card-border: 0 0% 15%;
+    --glass-bg: 0 0% 8% / 0.8;          /* Semi-transparent glass */
+    --glass-border: 0 0% 20% / 0.3;     /* Glass border */
+
+    /* Premium Accent Colors */
+    --primary: 217 91% 60%;             /* Sophisticated blue */
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 55%;
-    
-    /* Status colors for team coordination */
-    --status-flow: 142 69% 58%;      /* Green - in flow */
-    --status-slow: 45 93% 58%;       /* Yellow - slow progress */
-    --status-blocked: 0 84% 60%;     /* Red - blocked */
-    --status-flow-bg: 142 69% 95%;
-    --status-slow-bg: 45 93% 95%;
-    --status-blocked-bg: 0 84% 95%;
-    
-    /* Neutral grays for hierarchy */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --border: 214 32% 91%;
-    --border-hover: 214 32% 85%;
-    
-    /* Interactive elements */
-    --hover-bg: 210 40% 98%;
-    --active-bg: 210 40% 95%;
-    
-    /* Alert and warning colors */
-    --warning: 45 93% 58%;
-    --warning-foreground: 45 93% 15%;
-    --warning-bg: 45 93% 95%;
-    
-    /* Design system spacing and roundness */
+    --primary-hover: 217 91% 65%;
+    --primary-glow: 217 91% 60% / 0.3;  /* Glow effect */
+
+    --accent: 271 91% 65%;              /* Premium purple */
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 271 91% 65% / 0.3;
+
+    /* Status System with Subtle Accents */
+    --status-flow: 158 64% 52%;         /* Sophisticated teal */
+    --status-flow-bg: 158 45% 7%;       /* Very dark teal background */
+    --status-flow-glow: 158 64% 52% / 0.2;
+
+    --status-slow: 38 92% 50%;          /* Muted amber/orange */
+    --status-slow-bg: 38 45% 7%;        /* Very dark amber background */
+    --status-slow-glow: 38 92% 50% / 0.2;
+
+    --status-blocked: 350 65% 55%;      /* Soft coral/pink-red */
+    --status-blocked-bg: 350 45% 7%;    /* Very dark coral background */
+    --status-blocked-glow: 350 65% 55% / 0.2;
+
+    /* Modern Neutral Grays */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
+    --muted-hover: 0 0% 18%;
+
+    /* Borders & Dividers */
+    --border: 0 0% 15%;
+    --border-hover: 0 0% 25%;
+    --border-focus: 217 91% 60%;
+
+    /* Interactive Elements */
+    --hover-bg: 0 0% 12%;
+    --active-bg: 0 0% 18%;
+    --focus-ring: 217 91% 60% / 0.4;
+
+    /* Warning & Alert System */
+    --warning: 38 92% 50%;               /* Matches slow for consistency */
+    --warning-foreground: 0 0% 100%;
+    --warning-bg: 38 45% 7%;
+    --warning-glow: 38 92% 50% / 0.2;
+
+    --destructive: 350 65% 55%;         /* Matches blocked for consistency */
+    --destructive-foreground: 0 0% 100%;
+    --destructive-bg: 350 45% 7%;
+    --destructive-glow: 350 65% 55% / 0.2;
+
+    /* Success & Positive Actions */
+    --success: 158 64% 52%;              /* Matches flow for consistency */
+    --success-foreground: 0 0% 100%;
+    --success-bg: 158 45% 7%;
+    --success-glow: 158 64% 52% / 0.2;
+
+    /* Design System Properties */
     --radius: 0.75rem;
     --radius-sm: 0.5rem;
     --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Shadow System */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+    --shadow-glow: 0 0 20px var(--primary-glow);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Sidebar System */
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 217 91% 60% / 0.4;
+  }
+}
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+@layer base {
+  * {
+    @apply border-border;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  html {
+    @apply scroll-smooth;
+  }
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+  /* Custom Scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-hover));
+  }
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+  /* Selection Styling */
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--primary-foreground));
+  }
+}
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+@layer components {
+  /* Glass Morphism Effect */
+  .glass-morphism {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow:
+      0 8px 32px 0 rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  /* Glow Effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary-glow));
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent-glow));
+  }
+
+  .glow-status-flow {
+    box-shadow: 0 0 16px hsl(var(--status-flow-glow));
+  }
+
+  .glow-status-slow {
+    box-shadow: 0 0 16px hsl(var(--status-slow-glow));
+  }
+
+  .glow-status-blocked {
+    box-shadow: 0 0 16px hsl(var(--status-blocked-glow));
+  }
+
+  /* Modern Card Styling */
+  .stealth-card {
+    @apply bg-card border border-card-border rounded-lg;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stealth-card:hover {
+    @apply border-border-hover;
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+  }
+
+  /* Premium Button Base */
+  .btn-premium {
+    @apply inline-flex items-center justify-center rounded-lg font-medium;
+    @apply transition-all duration-300 ease-out;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-premium:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-premium:hover:before {
+    left: 100%;
   }
 }
 
