@@ -247,11 +247,11 @@ function TeamStatus () {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
-        return 'border-red-400 text-red-400'
+        return 'border-red-200/30 text-red-300/70'
       case 'medium':
-        return 'border-yellow-400 text-yellow-400'
+        return 'border-yellow-200/30 text-yellow-300/70'
       case 'low':
-        return 'border-green-400 text-green-400'
+        return 'border-green-200/30 text-green-300/70'
       default:
         return 'border-border text-muted-foreground'
     }
@@ -311,30 +311,6 @@ function TeamStatus () {
         </button>
       </div>
 
-      {/* Status Summary */}
-      <div className='grid grid-cols-3 gap-4'>
-        <div className='bg-card border border-border rounded-xl p-4 text-center'>
-          <div className='text-3xl font-bold text-foreground'>3</div>
-          <div className='text-sm text-muted-foreground mt-1 flex items-center justify-center gap-2'>
-            <span className='h-1.5 w-1.5 rounded-full bg-status-flow' />
-            IN FLOW
-          </div>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-4 text-center'>
-          <div className='text-3xl font-bold text-foreground'>1</div>
-          <div className='text-sm text-muted-foreground mt-1 flex items-center justify-center gap-2'>
-            <span className='h-1.5 w-1.5 rounded-full bg-status-slow' />
-            PROBLEM SOLVING
-          </div>
-        </div>
-        <div className='bg-card border border-border rounded-xl p-4 text-center'>
-          <div className='text-3xl font-bold text-foreground'>1</div>
-          <div className='text-sm text-muted-foreground mt-1 flex items-center justify-center gap-2'>
-            <span className='h-1.5 w-1.5 rounded-full bg-status-blocked' />
-            BLOCKED
-          </div>
-        </div>
-      </div>
 
       {/* Active Collisions */}
       {collisions.length > 0 && (
