@@ -1,0 +1,120 @@
+{
+  "summary": {
+    "efficiency_score": 0.28722222222222227,
+    "total_projects": 6,
+    "total_prompts": 144,
+    "total_cost": 1.09396125,
+    "avg_prompt_quality": 0.5201388888888889
+  },
+  "detailed_analysis": {
+    "overview": {
+      "total_projects": 6,
+      "total_prompts": 144,
+      "total_commands": 54,
+      "total_cost": 1.09396125,
+      "total_input_tokens": 833,
+      "total_output_tokens": 1504,
+      "security_projects": 1,
+      "coding_projects": 5
+    },
+    "prompt_patterns": {
+      "total_prompts": 144,
+      "avg_quality": 0.5201388888888889,
+      "quality_std": 0.25979547122435925,
+      "high_quality_rate": 0.2361111111111111,
+      "medium_quality_rate": 0.625,
+      "low_quality_rate": 0.1388888888888889,
+      "context_usage_rate": 0.3611111111111111,
+      "avg_prompt_length": 209.625,
+      "complexity_distribution": {
+        "simple": 102,
+        "medium": 36,
+        "complex": 6
+      }
+    },
+    "security_patterns": {
+      "total_security_prompts": 9,
+      "security_focus_percentage": 6.25,
+      "security_pattern_frequency": {
+        "authentication_requests": 1,
+        "authorization_requests": 1,
+        "security_review_usage": 1
+      },
+      "most_common_security_pattern": [
+        "authentication_requests",
+        1
+      ],
+      "security_command_usage": 1
+    },
+    "coding_patterns": {
+      "total_coding_prompts": 55,
+      "coding_focus_percentage": 38.19444444444444,
+      "coding_pattern_frequency": {
+        "testing_requests": 3,
+        "debugging_requests": 2,
+        "creation_requests": 4,
+        "api_development": 2
+      },
+      "most_common_coding_pattern": [
+        "creation_requests",
+        4
+      ]
+    },
+    "effectiveness": {
+      "avg_prompt_quality": 0.49268239045577,
+      "command_to_prompt_ratio": 0.9036093243168948,
+      "security_focus_ratio": 0.019049975259772388,
+      "coding_focus_ratio": 0.38648084006817307,
+      "context_usage_rate": 0.36254054648413875,
+      "cost_per_prompt": 0.17150237187943262,
+      "high_quality_prompt_rate": 0.19242399252295342,
+      "complex_task_rate": 0.013236021771400297
+    },
+    "anti_patterns": {
+      "total_anti_patterns": 1,
+      "anti_pattern_frequency": {
+        "context_neglect": 1
+      },
+      "most_common_anti_pattern": [
+        "context_neglect",
+        1
+      ],
+      "projects_with_anti_patterns": 1
+    }
+  },
+  "recommendations": [
+    {
+      "type": "prompt_quality",
+      "category": "Improvement",
+      "message": "Your prompt quality (0.52/1.0) has room for improvement.",
+      "action": "Try to be more specific about what you want Claude to do and provide examples when possible.",
+      "priority": "medium"
+    },
+    {
+      "type": "anti_pattern",
+      "category": "Warning",
+      "message": "You often request complex tasks without providing necessary context.",
+      "action": "For complex requests, always include relevant code, error messages, or project details.",
+      "priority": "high"
+    },
+    {
+      "type": "cost_optimization",
+      "category": "Efficiency",
+      "message": "Your cost per prompt ($0.1715) is higher than average.",
+      "action": "Be more specific in initial prompts to reduce back-and-forth iterations.",
+      "priority": "low"
+    },
+    {
+      "type": "usage_pattern",
+      "category": "Insight",
+      "message": "Most of your tasks are simple. You might benefit from more advanced Claude features.",
+      "action": "Try tackling more complex problems or use Claude for architecture planning and code review.",
+      "priority": "low"
+    }
+  ],
+  "trends": {
+    "security_focus": 6.25,
+    "coding_focus": 38.19444444444444,
+    "context_usage_trend": 36.11111111111111
+  }
+}

@@ -1,0 +1,23 @@
+# CodeLens Analytics Backend Dependencies
+
+# FastAPI and server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Supabase integration
+supabase==2.0.0
+
+# Data processing
+pandas==2.1.4
+numpy==1.24.4
+
+# Analytics and ML (optional for future enhancements)
+scikit-learn==1.3.2
+
+# Utilities
+python-multipart==0.0.6
+python-dotenv==1.0.0
+
+# Development and testing
+pytest==7.4.3
+requests==2.31.0

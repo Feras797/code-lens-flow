@@ -1,0 +1,54 @@
+============================================================
+CLAUDE DESKTOP DETAILED ANALYTICS REPORT
+============================================================
+
+📊 EXECUTIVE SUMMARY
+   Efficiency Score: 0.29/1.0
+   Total Projects Analyzed: 6
+   Total Prompts: 144
+   Total Investment: $1.0940
+   Average Prompt Quality: 0.52/1.0
+
+🎯 PROMPT ANALYSIS
+   Quality Distribution:
+     • High Quality (>0.7): 23.6%
+     • Medium Quality (0.3-0.7): 62.5%
+     • Low Quality (<0.3): 13.9%
+   Context Usage: 36.1% of prompts include context
+   Average Prompt Length: 210 characters
+   Task Complexity Breakdown:
+     • Simple: 102 tasks (70.8%)
+     • Medium: 36 tasks (25.0%)
+     • Complex: 6 tasks (4.2%)
+
+🔒 DOMAIN FOCUS ANALYSIS
+   Security Focus: 6.2% of prompts
+   Coding Focus: 38.2% of prompts
+   Most Common Security Patterns:
+     • Authentication Requests: 1 times
+     • Authorization Requests: 1 times
+     • Security Review Usage: 1 times
+   Most Common Coding Patterns:
+     • Testing Requests: 3 times
+     • Debugging Requests: 2 times
+     • Creation Requests: 4 times
+     • Api Development: 2 times
+
+⚠️  ANTI-PATTERNS DETECTED
+   • Context Neglect: 1 occurrences
+
+💡 PERSONALIZED RECOMMENDATIONS
+   1. 🟡 [Improvement] Your prompt quality (0.52/1.0) has room for improvement.
+      → Action: Try to be more specific about what you want Claude to do and provide examples when possible.
+   2. 🔴 [Warning] You often request complex tasks without providing necessary context.
+      → Action: For complex requests, always include relevant code, error messages, or project details.
+   3. 🟢 [Efficiency] Your cost per prompt ($0.1715) is higher than average.
+      → Action: Be more specific in initial prompts to reduce back-and-forth iterations.
+   4. 🟢 [Insight] Most of your tasks are simple. You might benefit from more advanced Claude features.
+      → Action: Try tackling more complex problems or use Claude for architecture planning and code review.
+
+📈 EFFICIENCY METRICS
+   Cost per Prompt: $0.1715
+   Context Usage Rate: 36.3%
+   High Quality Prompt Rate: 19.2%
+   Complex Task Rate: 1.3%

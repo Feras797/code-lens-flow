@@ -1,0 +1,16 @@
+{
+  "numStartups": 12,
+  "installMethod": "global",
+  "projects": {
+    "/Users/demo/gamma-web": {
+      "allowedTools": [],
+      "history": [
+        { "display": "build a Next.js login page with zod validation and supabase auth", "pastedContents": {} },
+        { "display": "from scratch add profile page", "pastedContents": {} },
+        { "display": "add secure password reset (token, expiry, rate limit) and tests", "pastedContents": {} },
+        { "display": "debug 401 in /api/session: stack shows missing cookie parser", "pastedContents": {} }
+      ]
+    }
+  }
+}
+

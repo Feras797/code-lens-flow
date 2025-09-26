@@ -1,0 +1,31 @@
+{
+  "numStartups": 41,
+  "installMethod": "global",
+  "projects": {
+    "/Users/demo/project-alpha": {
+      "allowedTools": [],
+      "history": [
+        { "display": "implement a health check endpoint in fastapi", "pastedContents": {} },
+        { "display": "/model gpt-5", "pastedContents": {} },
+        { "display": "my auth is not working", "pastedContents": {} },
+        { "display": "add rate limiting to the login endpoint and return 429 on bursts", "pastedContents": {} },
+        { "display": "rewrite the whole auth module", "pastedContents": {} },
+        { "display": "debug 500 error from /api/users: stack shows KeyError at handlers.py:72", "pastedContents": {} },
+        { "display": "now implement project listing with pagination (page,size) and tests", "pastedContents": {} },
+        { "display": "it's broken", "pastedContents": {} }
+      ],
+      "mcpServers": {}
+    },
+    "/Users/demo/project-alpha-frontend": {
+      "allowedTools": [],
+      "history": [
+        { "display": "create a React component <UserTable> with sortable columns", "pastedContents": {} },
+        { "display": "just use redux for this", "pastedContents": {} },
+        { "display": "convert the table to virtualized list (10k rows)", "pastedContents": {} },
+        { "display": "add error boundary around the dashboard", "pastedContents": {} }
+      ],
+      "mcpServers": {}
+    }
+  }
+}
+

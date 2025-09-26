@@ -1,0 +1,26 @@
+{
+  "numStartups": 57,
+  "installMethod": "global",
+  "projects": {
+    "/Users/demo/beta-backend": {
+      "allowedTools": [],
+      "history": [
+        { "display": "implement user registration with validation (email,password) and tests", "pastedContents": {} },
+        { "display": "not working", "pastedContents": {} },
+        { "display": "add observability: request id, latency logging, error codes", "pastedContents": {} },
+        { "display": "start over", "pastedContents": {} },
+        { "display": "fix 400 on /api/register, error: ValueError at services.py:34", "pastedContents": {} }
+      ]
+    },
+    "/Users/demo/beta-ml": {
+      "allowedTools": [],
+      "history": [
+        { "display": "create a feature store schema for user events (type,timestamp,metadata)", "pastedContents": {} },
+        { "display": "optimize pandas pipeline for 5M rows (memory+time)", "pastedContents": {} },
+        { "display": "it doesn't work", "pastedContents": {} },
+        { "display": "add unit tests for data validators and edge cases", "pastedContents": {} }
+      ]
+    }
+  }
+}
+
