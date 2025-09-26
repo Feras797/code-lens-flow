@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import TeamActivityChart from '@/components/dashboard/TeamActivityChart'
 import RecentCollisions from '@/components/dashboard/RecentCollisions'
 import { MetricCard } from '@/components/dashboard/MetricCard'
+import MCPSetupButton from '@/components/setup/MCPSetupButton'
 
 function Dashboard () {
   const [activeTab, setActiveTab] = useState('resolve')
@@ -29,6 +30,7 @@ function Dashboard () {
           </p>
         </div>
         <div className='flex items-center gap-2'>
+          <MCPSetupButton />
           <Badge variant="outline" className="gap-2 px-3 py-1.5 text-status-flow border-status-flow/30 bg-status-flow/5">
             <div className='h-2 w-2 rounded-full bg-status-flow animate-pulse' />
             Live Monitoring

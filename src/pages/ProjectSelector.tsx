@@ -43,9 +43,14 @@ function ProjectSelector() {
     .slice(0, 3)
 
   const handleProjectSelect = (project: Project) => {
+    // Only allow selection of Code Lens Flow project
+    if (project.name !== 'Code Lens Flow') return
+    
     selectProject(project.id)
     navigate(`/project/${project.id}/dashboard`)
   }
+
+  const isCodeLensFlow = (project: Project) => project.name === 'Code Lens Flow'
 
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
@@ -146,7 +151,12 @@ function ProjectSelector() {
               {recentProjects.map((project) => (
                 <Card
                   key={project.id}
-                  className="cursor-pointer hover:shadow-md transition-all duration-200 hover:border-primary/50"
+                  className={cn(
+                    "transition-all duration-200",
+                    isCodeLensFlow(project)
+                      ? "cursor-pointer hover:shadow-md hover:border-primary/50"
+                      : "opacity-50 cursor-not-allowed"
+                  )}
                   onClick={() => handleProjectSelect(project)}
                 >
                   <CardHeader className="pb-3">
@@ -168,23 +178,25 @@ function ProjectSelector() {
                           </div>
                         </div>
                       </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Settings className="h-4 w-4 mr-2" />
-                            Settings
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
-                            Archive Project
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      {isCodeLensFlow(project) && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Settings className="h-4 w-4 mr-2" />
+                              Settings
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive">
+                              Archive Project
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -241,7 +253,12 @@ function ProjectSelector() {
             {filteredProjects.map((project) => (
               <Card
                 key={project.id}
-                className="cursor-pointer hover:shadow-md transition-all duration-200 hover:border-primary/50"
+                className={cn(
+                  "transition-all duration-200",
+                  isCodeLensFlow(project)
+                    ? "cursor-pointer hover:shadow-md hover:border-primary/50"
+                    : "opacity-50 cursor-not-allowed"
+                )}
                 onClick={() => handleProjectSelect(project)}
               >
                 <CardHeader>
@@ -270,23 +287,25 @@ function ProjectSelector() {
                         </div>
                       </div>
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Settings className="h-4 w-4 mr-2" />
-                          Settings
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
-                          Archive Project
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {isCodeLensFlow(project) && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Settings className="h-4 w-4 mr-2" />
+                            Settings
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-destructive">
+                            Archive Project
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent>
