@@ -2,6 +2,7 @@ import { Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBra
 import { cn } from '@/lib/utils'
 import { useState, useEffect } from 'react'
 import { useRubeTeamStatusOptimized } from '@/hooks/useRubeTeamStatusOptimized'
+import { WorkItemDialog, type WorkItem } from '@/components/WorkItemDialog'
 import { useProject } from '@/contexts/ProjectContext'
 
 function TeamStatus () {
@@ -488,55 +489,61 @@ function TeamStatus () {
               {expandedDevs.has(dev.id) && (
                 <div className="ml-6 grid grid-cols-1 md:grid-cols-2 gap-3">
                   {dev.workItems.map((item) => (
-                    <div
+                    <WorkItemDialog
                       key={item.id}
-                      className={cn(
-                        "p-4 border border-l-4 rounded-lg hover:bg-background/30 transition-colors",
-                        getPriorityColor(item.priority).split(' ')[0] // Get just the border color
+                      item={item as WorkItem}
+                      developer={{ id: dev.id, name: dev.name, status: dev.status }}
+                      trigger={(
+                        <div
+                          className={cn(
+                            "p-4 border border-l-4 rounded-lg hover:bg-background/30 transition-colors cursor-pointer",
+                            getPriorityColor(item.priority).split(' ')[0]
+                          )}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h4 className="font-medium text-foreground">{item.task}</h4>
+                                <span className={cn(
+                                  "px-2 py-0.5 text-xs rounded border",
+                                  getPriorityColor(item.priority)
+                                )}>
+                                  {item.priority}
+                                </span>
+                              </div>
+
+                              <p className="text-sm text-muted-foreground mb-3">
+                                {item.chatContext}
+                              </p>
+
+                              <div className="flex items-center gap-2 mb-2">
+                                <FileCode className="h-3 w-3 text-muted-foreground" />
+                                <span className="text-xs font-mono text-muted-foreground">
+                                  {item.file}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground ml-4">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                <span>{item.duration}</span>
+                              </div>
+
+                              <div className="flex items-center gap-1">
+                                <MessageSquare className="h-3 w-3" />
+                                <span>{item.messages}</span>
+                              </div>
+
+                              <div className="flex items-center gap-1">
+                                <GitBranch className="h-3 w-3" />
+                                <span>{item.commits}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       )}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h4 className="font-medium text-foreground">{item.task}</h4>
-                            <span className={cn(
-                              "px-2 py-0.5 text-xs rounded border",
-                              getPriorityColor(item.priority)
-                            )}>
-                              {item.priority}
-                            </span>
-                          </div>
-
-                          <p className="text-sm text-muted-foreground mb-3">
-                            {item.chatContext}
-                          </p>
-
-                          <div className="flex items-center gap-2 mb-2">
-                            <FileCode className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-xs font-mono text-muted-foreground">
-                              {item.file}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground ml-4">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            <span>{item.duration}</span>
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <MessageSquare className="h-3 w-3" />
-                            <span>{item.messages}</span>
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <GitBranch className="h-3 w-3" />
-                            <span>{item.commits}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    />
                   ))}
                 </div>
               )}

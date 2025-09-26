@@ -52,6 +52,7 @@ interface ConversationData {
 // RUBE integration hook for fetching real-time team status from Supabase
 export function useRubeTeamStatus(enableLLM = false) {
   const [teamStatus, setTeamStatus] = useState<DeveloperStatus[]>([])
+  const [conversations, setConversations] = useState<ConversationData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
@@ -240,17 +241,20 @@ export function useRubeTeamStatus(enableLLM = false) {
       setIsLoading(true)
       setError(null)
 
-      const conversations = await fetchTeamStatusData()
-      const transformedData = transformToTeamStatus(conversations)
+      const fetchedConversations = await fetchTeamStatusData()
+      const transformedData = transformToTeamStatus(fetchedConversations)
+
+      // Store conversations for modal usage
+      setConversations(fetchedConversations)
 
       // Filter out users with no recent activity (optional)
       let activeTeamStatus = transformedData.filter(dev => dev.status !== 'idle' || dev.totalTasks > 0)
 
       // Apply LLM analysis if enabled
-      if (enableLLM && conversations.length > 0) {
+      if (enableLLM && fetchedConversations.length > 0) {
         try {
           // Convert conversations to LLM format
-          const llmConversations: LLMConversationData[] = conversations.map(conv => ({
+          const llmConversations: LLMConversationData[] = fetchedConversations.map(conv => ({
             id: conv.id,
             user_id: conv.user_id,
             user_query: conv.user_query,
@@ -299,6 +303,7 @@ export function useRubeTeamStatus(enableLLM = false) {
 
   return {
     teamStatus,
+    conversations,
     isLoading: isLoading || isLLMAnalyzing,
     error: error || llmError,
     lastUpdated,
