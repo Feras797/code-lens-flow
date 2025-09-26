@@ -1,9 +1,24 @@
-import { AlertTriangle, Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp } from 'lucide-react'
+import { AlertTriangle, Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp, Loader2, Database, TestTube } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getProcessedTeamStatus, transformToTeamStatusFormat } from '@/services/teamStatus.service'
 
 function TeamStatus () {
   const [expandedDevs, setExpandedDevs] = useState<Set<number>>(new Set([1, 2])) // Default expand first two developers
+  const [dataSource, setDataSource] = useState<'mock' | 'supabase'>('mock')
+  const [autoRefresh, setAutoRefresh] = useState(false)
+
+  // Query for real Supabase data
+  const { data: supabaseData, isLoading, error, refetch } = useQuery({
+    queryKey: ['team-status'],
+    queryFn: async () => {
+      const processed = await getProcessedTeamStatus()
+      return transformToTeamStatusFormat(processed)
+    },
+    enabled: dataSource === 'supabase',
+    refetchInterval: autoRefresh ? 30000 : false, // Refresh every 30 seconds if auto-refresh is on
+  })
 
   interface WorkItem {
     id: string
@@ -27,7 +42,8 @@ function TeamStatus () {
     currentContext: string
   }
 
-  const developers: Developer[] = [
+  // Mock data (keeping original)
+  const mockDevelopers: Developer[] = [
     {
       id: 1,
       name: 'Sarah Chen',
@@ -234,6 +250,9 @@ function TeamStatus () {
     }
   ]
 
+  // Choose data source
+  const developers = dataSource === 'supabase' && supabaseData ? supabaseData : mockDevelopers
+
   const toggleDeveloper = (devId: number) => {
     const newExpanded = new Set(expandedDevs)
     if (newExpanded.has(devId)) {
@@ -306,10 +325,90 @@ function TeamStatus () {
             Real-time visibility into what every developer is working on, extracted from Claude Code conversations
           </p>
         </div>
-        <button className='px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors'>
-          Auto-refresh
-        </button>
+        <div className='flex items-center gap-4'>
+          {/* Data Source Toggle */}
+          <div className='flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg'>
+            <button
+              onClick={() => setDataSource('mock')}
+              className={cn(
+                'flex items-center gap-2 px-3 py-1 rounded text-sm transition-colors',
+                dataSource === 'mock'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <TestTube className='h-4 w-4' />
+              Mock Data
+            </button>
+            <button
+              onClick={() => setDataSource('supabase')}
+              className={cn(
+                'flex items-center gap-2 px-3 py-1 rounded text-sm transition-colors',
+                dataSource === 'supabase'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <Database className='h-4 w-4' />
+              Live Data
+              {isLoading && <Loader2 className='h-3 w-3 animate-spin' />}
+            </button>
+          </div>
+
+          {/* Auto-refresh toggle */}
+          <button
+            onClick={() => {
+              setAutoRefresh(!autoRefresh)
+              if (!autoRefresh && dataSource === 'supabase') {
+                refetch()
+              }
+            }}
+            className={cn(
+              'px-4 py-2 rounded-lg transition-colors flex items-center gap-2',
+              autoRefresh
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card border border-border text-foreground hover:bg-background/80'
+            )}
+          >
+            {autoRefresh && <Loader2 className='h-4 w-4 animate-spin' />}
+            Auto-refresh
+          </button>
+        </div>
       </div>
+
+      {/* Error State */}
+      {error && dataSource === 'supabase' && (
+        <div className='bg-red-50 border border-red-200 rounded-lg p-4'>
+          <p className='text-red-800 text-sm'>
+            Error loading live data: {error.message}. Showing mock data instead.
+          </p>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {isLoading && dataSource === 'supabase' && (
+        <div className='flex items-center justify-center py-8'>
+          <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
+          <span className='ml-2 text-muted-foreground'>Processing conversations with AI...</span>
+        </div>
+      )}
+
+      {/* Empty State for Supabase data */}
+      {dataSource === 'supabase' && supabaseData?.length === 0 && !isLoading && (
+        <div className='bg-card border border-border rounded-lg p-8 text-center'>
+          <Database className='h-12 w-12 text-muted-foreground mx-auto mb-4' />
+          <h3 className='text-lg font-semibold text-foreground mb-2'>No Conversations Found</h3>
+          <p className='text-muted-foreground mb-4'>
+            No Claude Code conversations found in your Supabase database.
+          </p>
+          <button
+            onClick={() => setDataSource('mock')}
+            className='px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors'
+          >
+            View Mock Data
+          </button>
+        </div>
+      )}
 
 
       {/* Active Collisions */}
@@ -361,12 +460,21 @@ function TeamStatus () {
       )}
 
       {/* Header with Status Explainers */}
-      <div className='space-y-6'>
-        {/* Header Section with Title and Status Explainers */}
-        <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6'>
-          <div>
-            <h2 className='text-lg font-semibold text-foreground'>TEAM STATUS - E-Commerce Platform</h2>
-          </div>
+      {developers.length > 0 && (
+        <div className='space-y-6'>
+          {/* Header Section with Title and Status Explainers */}
+          <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6'>
+            <div>
+              <h2 className='text-lg font-semibold text-foreground'>
+                TEAM STATUS - {dataSource === 'supabase' ? 'Live Data' : 'Demo Mode'}
+              </h2>
+              <p className='text-sm text-muted-foreground mt-1'>
+                {dataSource === 'supabase' 
+                  ? `${developers.length} developers active • Powered by AI analysis` 
+                  : 'Sample data for demonstration purposes'
+                }
+              </p>
+            </div>
 
           <div className='flex flex-col sm:flex-row gap-4'>
             <div className='bg-card border border-border rounded-lg p-3 flex items-center gap-2'>
@@ -454,58 +562,28 @@ function TeamStatus () {
                 </div>
               </div>
 
-              {/* Expanded Work Items - Minimal Style */}
+              {/* Expanded Work Items - Minimal Cards */}
               {expandedDevs.has(dev.id) && (
-                <div className="ml-6 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="ml-6 space-y-2">
                   {dev.workItems.map((item) => (
                     <div
                       key={item.id}
-                      className={cn(
-                        "p-4 border border-l-4 rounded-lg hover:bg-background/30 transition-colors",
-                        getPriorityColor(item.priority).split(' ')[0] // Get just the border color
-                      )}
+                      className="p-3 bg-card border border-border rounded-lg hover:bg-background/50 transition-colors"
                     >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h4 className="font-medium text-foreground">{item.task}</h4>
-                            <span className={cn(
-                              "px-2 py-0.5 text-xs rounded border",
-                              getPriorityColor(item.priority)
-                            )}>
-                              {item.priority}
-                            </span>
-                          </div>
-
-                          <p className="text-sm text-muted-foreground mb-3">
-                            {item.chatContext}
-                          </p>
-
-                          <div className="flex items-center gap-2 mb-2">
-                            <FileCode className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-xs font-mono text-muted-foreground">
-                              {item.file}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground ml-4">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            <span>{item.duration}</span>
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <MessageSquare className="h-3 w-3" />
-                            <span>{item.messages}</span>
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <GitBranch className="h-3 w-3" />
-                            <span>{item.commits}</span>
-                          </div>
-                        </div>
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium text-foreground text-sm">{item.task}</h4>
+                        <span className={cn(
+                          "px-2 py-0.5 text-xs rounded-full font-medium",
+                          item.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
+                          item.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+                          'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                        )}>
+                          {item.priority}
+                        </span>
                       </div>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {item.chatContext}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -518,8 +596,9 @@ function TeamStatus () {
             </div>
           ))}
           </div>
+          </div>
         </div>
-      </div>
+      )}
 
     </div>
   )

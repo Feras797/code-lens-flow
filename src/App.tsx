@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import Dashboard from './pages/Dashboard'
@@ -54,16 +55,28 @@ function AppContent () {
   )
 }
 
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+})
+
 function App () {
   return (
     <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-      <AuthProvider>
-        <ProjectProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </ProjectProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ProjectProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ProjectProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   )
 }
