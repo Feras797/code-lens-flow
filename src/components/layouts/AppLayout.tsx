@@ -1,43 +1,11 @@
-import { Outlet, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
-import {
-  Settings,
-  HelpCircle,
-  LogOut,
-  User
-} from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { Outlet } from 'react-router-dom'
+import { Settings, HelpCircle, User } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 
 function AppLayout() {
-  const { user, signOut } = useAuth()
-  const navigate = useNavigate()
-
-  const handleSignOut = async () => {
-    await signOut()
-  }
-
-  // Get user initials for avatar fallback
-  const getUserInitials = () => {
-    if (!user) return 'U'
-    if (user.user_metadata?.full_name) {
-      return user.user_metadata.full_name
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    }
-    return user.email?.[0]?.toUpperCase() || 'U'
-  }
+  const getUserInitials = () => 'CL'
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,16 +40,16 @@ function AppLayout() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2 px-2">
                     <Avatar className='h-8 w-8'>
-                      <AvatarImage src={user?.avatar_url || ''} />
+                      <AvatarImage src='' />
                       <AvatarFallback>{getUserInitials()}</AvatarFallback>
                     </Avatar>
                     <span className="hidden sm:inline text-sm font-medium">
-                      {user?.full_name || user?.email?.split('@')[0] || 'User'}
+                      Team Member
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end' className='w-56'>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Workspace</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className='gap-2'>
                     <User className='h-4 w-4' />
@@ -90,14 +58,6 @@ function AppLayout() {
                   <DropdownMenuItem className='gap-2'>
                     <Settings className='h-4 w-4' />
                     Account Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    className='gap-2 text-destructive focus:text-destructive'
-                    onClick={handleSignOut}
-                  >
-                    <LogOut className='h-4 w-4' />
-                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -58,14 +58,13 @@ If you need vector embeddings for AlphaEarth integration:
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-## Step 5: Configure Authentication
+## Step 5: (Optional) Authentication
+
+The application no longer requires Supabase authentication. If you plan to add it back in the future:
 
 1. Go to **Authentication → Settings**
-2. Configure the following:
-   - **Site URL**: use the origin users should see after confirming email (e.g. `http://localhost:5173` in development, `https://code-lens-flow.vercel.app/` in production)
-   - **Redirect URLs**: add every domain you allow Supabase to redirect to (must include `https://code-lens-flow.vercel.app/` and any other permitted origins)
-   - **Email Auth**: Enable email/password authentication
-   - **Email Templates**: Customize if needed
+2. Configure your preferred sign-in providers and redirect URLs
+3. Reintroduce client-side auth handling where needed
 
 ## Step 6: Set Up Storage (Optional)
 

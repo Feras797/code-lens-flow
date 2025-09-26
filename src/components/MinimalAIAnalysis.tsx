@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react'
-import { Brain, Play, User } from 'lucide-react'
+import { useState } from 'react'
+import { Brain, Play } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { supabase } from '@/lib/supabase'
 import { useClaudeChatLogs } from '@/hooks/useSupabase'
 import { useTeamHealthAnalysis } from '@/hooks/useTeamAnalysis'
 
 export function MinimalAIAnalysis() {
-  const [currentUser, setCurrentUser] = useState<any>(null)
   const [analysisResults, setAnalysisResults] = useState<any>(null)
 
   // Hooks for data and analysis
@@ -17,30 +15,14 @@ export function MinimalAIAnalysis() {
 
   const isAnalyzing = analysisLoading
 
-  // Get current user session
-  useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        setCurrentUser(session.user)
-      }
-    }
-    getSession()
-  }, [])
-
   const runMinimalAnalysis = async () => {
-    if (!currentUser) {
-      console.error('No user session found')
-      return
-    }
-
     try {
       // Check if we have chat logs data
       if (!chatLogs || chatLogs.length === 0) {
         // Fallback to demo mode with sample analysis
         setAnalysisResults({
-          user_id: currentUser.id,
-          email: currentUser.email,
+          user_id: 'workspace',
+          email: 'team@code-lens-flow',
           analysis_timestamp: new Date().toISOString(),
           status: 'Demo mode - no chat logs available',
           demo_insights: {
@@ -71,8 +53,8 @@ export function MinimalAIAnalysis() {
       if (teamInsight) {
         // Transform team insight to format expected by UI
         const analysis = {
-          user_id: currentUser.id,
-          email: currentUser.email,
+          user_id: 'workspace',
+          email: 'team@code-lens-flow',
           analysis_timestamp: new Date().toISOString(),
           total_conversations: chatLogs.length,
 
@@ -103,8 +85,8 @@ export function MinimalAIAnalysis() {
 
       // Fallback with basic stats from chat logs
       const basicAnalysis = {
-        user_id: currentUser.id,
-        email: currentUser.email,
+        user_id: 'workspace',
+        email: 'team@code-lens-flow',
         analysis_timestamp: new Date().toISOString(),
         status: 'Basic analysis mode',
         total_conversations: chatLogs?.length || 0,
@@ -155,17 +137,11 @@ export function MinimalAIAnalysis() {
               </p>
             </div>
           </div>
-          {currentUser && (
-            <Badge variant="outline" className="flex items-center gap-1">
-              <User className="w-3 h-3" />
-              {currentUser.email}
-            </Badge>
-          )}
         </div>
 
         <Button
           onClick={runMinimalAnalysis}
-          disabled={isAnalyzing || !currentUser || logsLoading}
+          disabled={isAnalyzing || logsLoading}
           className="w-full"
         >
           {isAnalyzing ? (
@@ -185,12 +161,6 @@ export function MinimalAIAnalysis() {
             </>
           )}
         </Button>
-
-        {!currentUser && (
-          <p className="text-sm text-yellow-600 mt-2">
-            Please log in to analyze your data
-          </p>
-        )}
 
         {analysisError && (
           <p className="text-sm text-red-600 mt-2">
