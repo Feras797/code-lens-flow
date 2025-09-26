@@ -80,7 +80,13 @@ cd CloudWalkers`}
               </CodeBlock>
 
               <h4 className="font-medium mb-2 text-blue-800">2. Install FastMCP</h4>
-              <CodeBlock>pip install fastmcp</CodeBlock>
+              <CodeBlock>{`# Install via npm (global)
+npm install -g fastmcp
+
+# Verify install
+fastmcp --version
+# or
+npx fastmcp --version`}</CodeBlock>
 
               <h4 className="font-medium mb-2 text-blue-800">3. Configure Environment Variables</h4>
               <p className="text-blue-700 text-sm mb-2">Create a <code className="bg-blue-100 px-1 rounded">.env</code> file in the CloudWalkers directory:</p>
@@ -282,7 +288,11 @@ claude mcp add goonersquad-server \\
               <div className="space-y-2">
                 <div>
                   <p className="text-muted-foreground text-sm">With FastMCP:</p>
-                  <CodeBlock>fastmcp run server.py</CodeBlock>
+                  <CodeBlock>{`# Using global install
+fastmcp run server.py
+
+# Or via npx (no global install required)
+npx fastmcp run server.py`}</CodeBlock>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-sm">Traditional method:</p>
@@ -382,7 +392,9 @@ claude mcp add goonersquad-server \\
                   <CodeBlock>
 {`# Test Python environment
 python --version
-pip list | grep -E "(fastmcp|supabase)"
+
+# Verify FastMCP installed (global) or available via npx
+fastmcp --version || npx fastmcp --version
 
 # Test environment variables
 python -c "import os; print('SUPABASE_URL' in os.environ)"
