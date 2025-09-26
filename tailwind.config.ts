@@ -206,6 +206,14 @@ export default {
             opacity: "0.8",
           },
         },
+        "pulse-slow": {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.85",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -217,6 +225,7 @@ export default {
         "slide-up": "slide-up 0.4s ease-out",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "status-pulse": "status-pulse 1.5s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 3s ease-in-out infinite",
       },
       backdropFilter: {
         'xs': 'blur(2px)',

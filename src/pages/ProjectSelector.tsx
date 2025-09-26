@@ -82,6 +82,32 @@ function ProjectSelector() {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              {/* Team Activity Indicator */}
+              <div className='bg-card border border-border rounded-lg px-4 py-2'>
+                <div className='flex items-center gap-4'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-xs font-medium text-muted-foreground'>Team Activity</span>
+                    <div className='flex items-center gap-1'>
+                      <div className='h-2 w-2 rounded-full bg-status-flow animate-pulse' />
+                      <span className='text-xs text-status-flow'>Live</span>
+                    </div>
+                  </div>
+                  <div className='flex items-center gap-3 text-xs'>
+                    <div className='flex items-center gap-1'>
+                      <div className='h-2 w-2 rounded-full bg-status-flow' />
+                      <span className='text-muted-foreground'>9 Active</span>
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <div className='h-2 w-2 rounded-full bg-status-slow' />
+                      <span className='text-muted-foreground'>2 Slow</span>
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <div className='h-2 w-2 rounded-full bg-status-blocked' />
+                      <span className='text-muted-foreground'>1 Stuck</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <Button
                 variant="outline"
                 onClick={() => setView(view === 'grid' ? 'list' : 'grid')}

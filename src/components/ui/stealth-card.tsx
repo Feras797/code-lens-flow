@@ -12,8 +12,8 @@ const StealthCard = React.forwardRef<HTMLDivElement, StealthCardProps>(
 
     const variants = {
       default: "bg-card border-card-border shadow-lg hover:shadow-xl hover:border-border-hover hover:-translate-y-1",
-      glass: "glass-morphism hover:bg-glass-bg/90 hover:-translate-y-1",
-      glow: "bg-card border-card-border shadow-lg hover:shadow-xl hover:border-border-hover hover:-translate-y-1"
+      glass: "glass-morphism hover:bg-glass-bg/95 hover:-translate-y-1 hover:shadow-2xl border-2",
+      glow: "bg-card border-card-border shadow-xl hover:shadow-2xl hover:border-border-hover hover:-translate-y-2"
     }
 
     const glowStyles = {
@@ -39,8 +39,11 @@ const StealthCard = React.forwardRef<HTMLDivElement, StealthCardProps>(
       >
         {children}
 
-        {/* Subtle shine effect on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none" />
+        {/* Enhanced shine effect on hover with animation */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none" />
+        {variant === 'glass' && (
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl opacity-0 group-hover:opacity-30 blur transition-opacity duration-700" />
+        )}
       </div>
     )
   }

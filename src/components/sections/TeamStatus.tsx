@@ -1,10 +1,8 @@
-import { AlertTriangle, Clock, FileText, Users, Zap, Activity } from 'lucide-react';
+import { Clock, FileText, Users, Zap, Activity } from 'lucide-react';
 import { StealthCard } from '@/components/ui/stealth-card';
 import { StatusIndicator, StatusBadge } from '@/components/ui/status-indicator';
-import { CollisionAlert } from '@/components/ui/collision-alert';
 import { MetricDisplay } from '@/components/ui/metric-display';
 import { Project } from '@/types';
-import { mockCollisions } from '@/data/mockData';
 
 interface TeamStatusProps {
   project: Project;
@@ -17,155 +15,137 @@ export function TeamStatus({ project }: TeamStatusProps) {
     return order[a.status] - order[b.status];
   });
 
-  const collisionData = project.hasCollisions ? mockCollisions.map(collision => ({
-    id: collision.id,
-    type: "file" as const,
-    developers: collision.developers,
-    resource: collision.file,
-    severity: "high" as const,
-    description: `Multiple developers are editing the same file simultaneously`
-  })) : [];
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Live Team Status Board Header */}
-      <StealthCard className="p-6" variant="glass">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-            <Activity className="w-5 h-5 text-primary" />
+      {/* Refined Live Team Status Board Header */}
+      <StealthCard className="p-6 relative overflow-hidden border border-card-border/50" variant="glass">
+        {/* Subtle Gradient Accent */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+        
+        <div className="relative flex items-center gap-3 mb-5">
+          <div className="w-12 h-12 rounded-xl bg-background-card border border-primary/30 flex items-center justify-center">
+            <Activity className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Live Team Status Board</h2>
-            <p className="text-sm text-foreground-muted">
-              Real-time visibility into what every developer is working on, extracted from Claude Code conversations
+            <h2 className="text-2xl font-semibold text-foreground">
+              Live Team Status Board
+            </h2>
+            <p className="text-sm text-foreground-muted mt-0.5">
+              Real-time visibility into what every developer is working on
             </p>
           </div>
         </div>
 
-        {/* Status Overview Metrics */}
-        <div className="grid grid-cols-3 gap-4 mt-6">
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center">
-              <StatusIndicator status="flow" size="lg" withPulse withGlow />
+        {/* Refined Status Overview Metrics */}
+        <div className="relative grid grid-cols-3 gap-4 mt-6">
+          <div className="relative bg-status-flow-bg/50 rounded-lg p-4 border border-status-flow/20 hover:border-status-flow/40 transition-all hover:shadow-md group cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="flow" size="md" withPulse />
             </div>
-            <div className="text-2xl font-bold text-status-flow">
+            <div className="text-3xl font-semibold text-status-flow">
               {project.statusDistribution.active}
             </div>
-            <div className="text-xs text-foreground-muted uppercase tracking-wider">
+            <div className="text-xs text-status-flow/70 uppercase tracking-wide font-medium mt-1">
               In Flow
             </div>
+            <div className="absolute top-2 right-2 w-2 h-2 bg-status-flow/60 rounded-full animate-pulse" />
           </div>
 
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center">
-              <StatusIndicator status="slow" size="lg" withPulse />
+          <div className="relative bg-status-slow-bg/50 rounded-lg p-4 border border-status-slow/20 hover:border-status-slow/40 transition-all hover:shadow-md group cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="slow" size="md" withPulse />
             </div>
-            <div className="text-2xl font-bold text-status-slow">
+            <div className="text-3xl font-semibold text-status-slow">
               {project.statusDistribution.slow}
             </div>
-            <div className="text-xs text-foreground-muted uppercase tracking-wider">
+            <div className="text-xs text-status-slow/70 uppercase tracking-wide font-medium mt-1">
               Problem Solving
             </div>
+            <div className="absolute top-2 right-2 w-2 h-2 bg-status-slow/60 rounded-full animate-pulse" />
           </div>
 
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center">
-              <StatusIndicator status="blocked" size="lg" withPulse withGlow />
+          <div className="relative bg-status-blocked-bg/50 rounded-lg p-4 border border-status-blocked/20 hover:border-status-blocked/40 transition-all hover:shadow-md group cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="blocked" size="md" withPulse withGlow />
             </div>
-            <div className="text-2xl font-bold text-status-blocked">
+            <div className="text-3xl font-semibold text-status-blocked">
               {project.statusDistribution.blocked}
             </div>
-            <div className="text-xs text-foreground-muted uppercase tracking-wider">
+            <div className="text-xs text-status-blocked/70 uppercase tracking-wide font-medium mt-1">
               Blocked
             </div>
+            <div className="absolute top-2 right-2 w-2 h-2 bg-status-blocked/60 rounded-full animate-pulse" />
           </div>
         </div>
       </StealthCard>
 
-      {/* Collision Detection Alerts */}
-      {project.hasCollisions && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-warning animate-pulse-glow" />
-            Active Collisions
-          </h3>
-          {collisionData.map((collision, index) => (
-            <div
-              key={collision.id}
-              className="animate-slide-up"
-              style={{
-                animationDelay: `${index * 100}ms`,
-                animationFillMode: 'both'
-              }}
-            >
-              <CollisionAlert
-                collision={collision}
-                onDismiss={(id) => console.log('Dismiss collision:', id)}
-                onResolve={(id) => console.log('Resolve collision:', id)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
 
-      {/* Team Developer Cards */}
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <Users className="w-5 h-5" />
-          Developer Activity
-        </h3>
+      {/* Team Developer Cards Section */}
+      <div className="space-y-5">
+        <div className="flex items-center gap-2">
+          <Users className="w-5 h-5 text-foreground-muted" />
+          <h3 className="text-lg font-semibold text-foreground">Developer Activity</h3>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedDevelopers.map((developer, index) => (
             <StealthCard
               key={developer.id}
-              className="p-6 border-l-4 group animate-slide-up"
+              className={`p-5 border-l-4 group animate-fade-in relative ${
+                developer.status === 'blocked' ? 'ring-1 ring-status-blocked/20' : ''
+              }`}
               style={{
-                borderLeftColor: `hsl(var(--status-${developer.status}))`,
+                borderLeftColor: `hsl(var(--status-${developer.status}) / 0.8)`,
+                borderLeftWidth: '3px',
                 animationDelay: `${index * 100}ms`,
                 animationFillMode: 'both'
               }}
-              variant="glass"
-              glow={developer.status === 'blocked' ? 'status-blocked' :
-                     developer.status === 'slow' ? 'status-slow' : 'status-flow'}
+              variant="default"
             >
               {/* Developer header */}
               <div className="flex items-center gap-3 mb-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm ${
-                  developer.status === 'flow' ? 'bg-status-flow text-white' :
-                  developer.status === 'slow' ? 'bg-status-slow text-white' :
-                  developer.status === 'blocked' ? 'bg-status-blocked text-white' : 'bg-primary text-primary-foreground'
+                <div className={`relative w-12 h-12 rounded-lg flex items-center justify-center font-semibold text-sm border ${
+                  developer.status === 'flow' ? 'bg-status-flow-bg border-status-flow/30 text-status-flow' :
+                  developer.status === 'slow' ? 'bg-status-slow-bg border-status-slow/30 text-status-slow' :
+                  developer.status === 'blocked' ? 'bg-status-blocked-bg border-status-blocked/30 text-status-blocked' : 'bg-primary/10 border-primary/30 text-primary'
                 }`}>
                   {developer.avatar}
+                  {developer.status === 'blocked' && (
+                    <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-status-blocked rounded-full" />
+                  )}
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-foreground text-lg">{developer.name}</h4>
+                  <h4 className="font-semibold text-foreground text-base">
+                    {developer.name}
+                  </h4>
                   <StatusBadge
                     status={developer.status}
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
+                    withIcon={false}
                   />
                 </div>
                 <StatusIndicator
                   status={developer.status}
-                  size="md"
-                  withPulse
-                  withGlow={developer.status === 'blocked'}
+                  size="sm"
+                  withPulse={developer.status === 'blocked'}
                 />
               </div>
 
               {/* Current task */}
               <div className="space-y-3">
-                <div className="bg-background-subtle rounded-lg p-3">
-                  <p className="text-sm font-medium text-foreground mb-2">
+                <div className="bg-background-subtle/50 rounded-lg p-3 border border-border/50">
+                  <p className="text-sm text-foreground mb-2 line-clamp-2">
                     {developer.currentTask}
                   </p>
                   <div className="flex items-center justify-between text-xs text-foreground-muted">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <Clock className="w-3 h-3" />
                       <span>{developer.duration}</span>
                     </div>
                     {developer.fileName && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
                         <FileText className="w-3 h-3" />
                         <span className="font-mono">{developer.fileName}</span>
                       </div>
@@ -175,13 +155,11 @@ export function TeamStatus({ project }: TeamStatusProps) {
               </div>
 
               {/* Activity indicator */}
-              <div className="absolute top-4 right-4">
-                <div className={`w-2 h-2 rounded-full animate-pulse ${
-                  developer.status === 'flow' ? 'bg-status-flow' :
-                  developer.status === 'slow' ? 'bg-status-slow' :
-                  'bg-status-blocked'
-                }`} />
-              </div>
+              {developer.status === 'blocked' && (
+                <div className="absolute top-4 right-4">
+                  <div className="w-2 h-2 rounded-full bg-status-blocked animate-pulse" />
+                </div>
+              )}
             </StealthCard>
           ))}
         </div>
@@ -202,43 +180,46 @@ export function TeamStatus({ project }: TeamStatusProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-status-flow-bg border border-status-flow/30 rounded-xl p-4 text-center group hover:scale-[1.02] transition-transform">
-            <div className="flex items-center justify-center mb-3">
-              <StatusIndicator status="flow" size="lg" withPulse />
+          <div className="relative bg-status-flow-bg/30 border border-status-flow/25 rounded-lg p-4 text-center group hover:bg-status-flow-bg/40 transition-all cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="flow" size="md" withPulse />
             </div>
-            <div className="text-2xl font-bold text-status-flow mb-1">
+            <div className="text-2xl font-semibold text-status-flow mb-1">
               {project.statusDistribution.active}
             </div>
-            <h4 className="font-semibold text-status-flow mb-2">Flow State</h4>
+            <h4 className="font-medium text-status-flow text-sm mb-1">Flow State</h4>
             <p className="text-xs text-foreground-subtle leading-relaxed">
-              Quick solutions, steady progress, consistent momentum
+              Quick solutions, steady progress
             </p>
           </div>
 
-          <div className="bg-status-slow-bg border border-status-slow/30 rounded-xl p-4 text-center group hover:scale-[1.02] transition-transform">
-            <div className="flex items-center justify-center mb-3">
-              <StatusIndicator status="slow" size="lg" withPulse />
+          <div className="relative bg-status-slow-bg/30 border border-status-slow/25 rounded-lg p-4 text-center group hover:bg-status-slow-bg/40 transition-all cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="slow" size="md" withPulse />
             </div>
-            <div className="text-2xl font-bold text-status-slow mb-1">
+            <div className="text-2xl font-semibold text-status-slow mb-1">
               {project.statusDistribution.slow}
             </div>
-            <h4 className="font-semibold text-status-slow mb-2">Problem Solving</h4>
+            <h4 className="font-medium text-status-slow text-sm mb-1">Problem Solving</h4>
             <p className="text-xs text-foreground-subtle leading-relaxed">
-              Multiple iterations, debugging, exploring solutions
+              Multiple iterations, debugging
             </p>
           </div>
 
-          <div className="bg-status-blocked-bg border border-status-blocked/30 rounded-xl p-4 text-center group hover:scale-[1.02] transition-transform">
-            <div className="flex items-center justify-center mb-3">
-              <StatusIndicator status="blocked" size="lg" withPulse withGlow />
+          <div className="relative bg-status-blocked-bg/30 border border-status-blocked/25 rounded-lg p-4 text-center group hover:bg-status-blocked-bg/40 transition-all cursor-pointer">
+            <div className="flex items-center justify-center mb-2">
+              <StatusIndicator status="blocked" size="md" withPulse withGlow />
             </div>
-            <div className="text-2xl font-bold text-status-blocked mb-1">
+            <div className="text-2xl font-semibold text-status-blocked mb-1">
               {project.statusDistribution.blocked}
             </div>
-            <h4 className="font-semibold text-status-blocked mb-2">Blocked</h4>
+            <h4 className="font-medium text-status-blocked text-sm mb-1">Blocked</h4>
             <p className="text-xs text-foreground-subtle leading-relaxed">
-              Extended time on single issue, needs intervention
+              Extended time, needs help
             </p>
+            {project.statusDistribution.blocked > 0 && (
+              <div className="absolute top-2 right-2 w-2 h-2 bg-status-blocked rounded-full animate-pulse" />
+            )}
           </div>
         </div>
 

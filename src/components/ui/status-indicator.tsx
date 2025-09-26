@@ -5,7 +5,7 @@ export type Status = "flow" | "slow" | "blocked" | "offline"
 
 interface StatusIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   status: Status
-  size?: "sm" | "md" | "lg"
+  size?: "sm" | "md" | "lg" | "xl"
   withPulse?: boolean
   withGlow?: boolean
   showLabel?: boolean
@@ -26,7 +26,8 @@ const StatusIndicator = React.forwardRef<HTMLDivElement, StatusIndicatorProps>(
     const sizes = {
       sm: "w-2 h-2",
       md: "w-3 h-3",
-      lg: "w-4 h-4"
+      lg: "w-4 h-4",
+      xl: "w-5 h-5"
     }
 
     const statusColors = {
@@ -104,7 +105,7 @@ const StatusIndicator = React.forwardRef<HTMLDivElement, StatusIndicatorProps>(
             className={cn(
               sizes[size],
               statusColors[status],
-              "rounded-full absolute inset-0 animate-ping opacity-75"
+              "rounded-full absolute inset-0 animate-ping opacity-50"
             )}
           />
         )}
@@ -140,22 +141,22 @@ const StatusBadge = React.forwardRef<HTMLDivElement, StatusBadgeProps>(
     const baseVariants = {
       flow: {
         default: "bg-status-flow-bg text-status-flow border-status-flow/20",
-        outline: "border-2 border-status-flow text-status-flow bg-transparent",
-        ghost: "text-status-flow hover:bg-status-flow-bg"
+        outline: "border border-status-flow/50 text-status-flow bg-transparent hover:bg-status-flow-bg/30",
+        ghost: "text-status-flow hover:bg-status-flow-bg/20"
       },
       slow: {
         default: "bg-status-slow-bg text-status-slow border-status-slow/20",
-        outline: "border-2 border-status-slow text-status-slow bg-transparent",
-        ghost: "text-status-slow hover:bg-status-slow-bg"
+        outline: "border border-status-slow/50 text-status-slow bg-transparent hover:bg-status-slow-bg/30",
+        ghost: "text-status-slow hover:bg-status-slow-bg/20"
       },
       blocked: {
         default: "bg-status-blocked-bg text-status-blocked border-status-blocked/20",
-        outline: "border-2 border-status-blocked text-status-blocked bg-transparent",
-        ghost: "text-status-blocked hover:bg-status-blocked-bg"
+        outline: "border border-status-blocked/50 text-status-blocked bg-transparent hover:bg-status-blocked-bg/30",
+        ghost: "text-status-blocked hover:bg-status-blocked-bg/20"
       },
       offline: {
         default: "bg-muted text-muted-foreground border-muted/20",
-        outline: "border-2 border-muted text-muted-foreground bg-transparent",
+        outline: "border border-muted text-muted-foreground bg-transparent",
         ghost: "text-muted-foreground hover:bg-muted"
       }
     }

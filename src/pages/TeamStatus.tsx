@@ -1,4 +1,4 @@
-import { AlertTriangle, Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp } from 'lucide-react'
+import { Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
@@ -257,17 +257,6 @@ function TeamStatus () {
     }
   }
 
-  const collisions = [
-    {
-      type: 'FILE COLLISION',
-      severity: 'HIGH',
-      message: 'Multiple developers editing the same file',
-      detail: 'Sarah Chen and You are both working on auth.js',
-      affected: ['Sarah Chen', 'You'],
-      suggestion: 'Suggest Resolution',
-      acknowledge: 'Acknowledge'
-    }
-  ]
 
   const getStatusDot = (status: string) => {
     switch (status) {
@@ -311,54 +300,6 @@ function TeamStatus () {
         </button>
       </div>
 
-
-      {/* Active Collisions */}
-      {collisions.length > 0 && (
-        <div className='space-y-4'>
-          <h2 className='text-lg font-semibold text-foreground flex items-center gap-2'>
-            <AlertTriangle className='h-5 w-5 text-muted-foreground' />
-            Active Collisions
-          </h2>
-          {collisions.map((collision, index) => (
-            <div key={index} className='bg-card border border-border rounded-xl p-4'>
-              <div className='flex items-start justify-between'>
-                <div className='flex-1'>
-                  <div className='flex items-center gap-3 mb-2'>
-                    <div className='p-1.5 rounded-lg bg-background'>
-                      <FileCode className='h-4 w-4 text-muted-foreground' />
-                    </div>
-                    <span className='text-sm font-semibold text-foreground'>{collision.type}</span>
-                    <span className='px-2 py-0.5 bg-background text-muted-foreground text-xs rounded-full border border-border'>
-                      {collision.severity}
-                    </span>
-                  </div>
-                  <p className='text-sm text-foreground mb-1'>{collision.detail}</p>
-                  <p className='text-xs text-muted-foreground mb-3'>{collision.message}</p>
-                  <div className='flex items-center gap-2 mb-3'>
-                    <span className='text-xs text-muted-foreground'>Involved:</span>
-                    {collision.affected.map((person, i) => (
-                      <span key={i} className='px-2 py-1 bg-background/50 rounded-lg text-xs'>
-                        {person}
-                      </span>
-                    ))}
-                  </div>
-                  <div className='flex gap-2'>
-                    <button className='px-3 py-1.5 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 transition-colors'>
-                      {collision.suggestion}
-                    </button>
-                    <button className='px-3 py-1.5 bg-background text-foreground text-sm rounded-lg hover:bg-background/80 transition-colors'>
-                      {collision.acknowledge}
-                    </button>
-                  </div>
-                </div>
-                <button className='text-muted-foreground hover:text-foreground'>
-                  ✕
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Header with Status Explainers */}
       <div className='space-y-6'>

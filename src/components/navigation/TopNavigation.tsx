@@ -81,7 +81,7 @@ export function TopNavigation() {
             variant="ghost"
             size="sm"
             onClick={handleBackToProjects}
-            className="gap-2 text-muted-foreground hover:text-foreground"
+            className="gap-2 text-muted-foreground hover:text-blue-400 hover:bg-blue-500/10"
           >
             <ChevronLeft className="h-4 w-4" />
             Back to Projects
@@ -133,16 +133,12 @@ export function TopNavigation() {
                 <div className={cn(
                   'flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold',
                   isActive || isPast || isCompleted
-                    ? 'bg-primary text-primary-foreground'
+                    ? 'bg-blue-500 text-white'
                     : isCurrent
-                    ? 'bg-primary/20 text-primary border-2 border-primary'
+                    ? 'bg-blue-500/20 text-blue-400 border-2 border-blue-500'
                     : 'bg-muted text-muted-foreground'
                 )}>
-                  {isCompleted ? (
-                    <div className="w-3 h-3 bg-white rounded-full" />
-                  ) : (
-                    item.step
-                  )}
+                  {item.step}
                 </div>
 
                 {/* Icon and label */}
@@ -153,7 +149,7 @@ export function TopNavigation() {
 
                 {/* Active indicator */}
                 {isActive && (
-                  <div className="absolute inset-x-0 bottom-0 h-0.5 bg-primary rounded-full" />
+                  <div className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-500 rounded-full" />
                 )}
 
                 {/* Progress connector line */}
@@ -161,7 +157,7 @@ export function TopNavigation() {
                   <div className={cn(
                     'absolute left-full top-1/2 w-8 h-px -translate-y-1/2 -translate-x-4',
                     isPast || (isCurrent && isCompleted)
-                      ? 'bg-primary'
+                      ? 'bg-blue-500'
                       : 'bg-border'
                   )} />
                 )}
