@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useSimpleLLMAnalysis, useMergeLLMWithStatus } from './useSimpleLLMAnalysis'
+import type { ConversationData as LLMConversationData } from '../services/simpleLLMAnalysis'
 
 export interface DeveloperTask {
   id: string
@@ -24,6 +26,16 @@ export interface DeveloperStatus {
   totalTasks: number
   completedTasks: number
   lastActive?: string
+  // LLM enhancement fields
+  llmInsights?: {
+    confidence: number
+    keyTopics: string[]
+    mood: 'positive' | 'neutral' | 'frustrated' | 'focused'
+    productivity: 'high' | 'medium' | 'low'
+    recommendations?: string[]
+  }
+  originalStatus?: 'flow' | 'problem_solving' | 'blocked' | 'idle'
+  originalStatusMessage?: string
 }
 
 interface ConversationData {
@@ -38,11 +50,15 @@ interface ConversationData {
 }
 
 // RUBE integration hook for fetching real-time team status from Supabase
-export function useRubeTeamStatus() {
+export function useRubeTeamStatus(enableLLM = false) {
   const [teamStatus, setTeamStatus] = useState<DeveloperStatus[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
+
+  // LLM analysis hooks
+  const { analyzeConversations, isAnalyzing: isLLMAnalyzing, error: llmError } = useSimpleLLMAnalysis()
+  const { mergeAnalysis } = useMergeLLMWithStatus()
 
   // Supabase configuration from environment
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -228,7 +244,34 @@ export function useRubeTeamStatus() {
       const transformedData = transformToTeamStatus(conversations)
 
       // Filter out users with no recent activity (optional)
-      const activeTeamStatus = transformedData.filter(dev => dev.status !== 'idle' || dev.totalTasks > 0)
+      let activeTeamStatus = transformedData.filter(dev => dev.status !== 'idle' || dev.totalTasks > 0)
+
+      // Apply LLM analysis if enabled
+      if (enableLLM && conversations.length > 0) {
+        try {
+          // Convert conversations to LLM format
+          const llmConversations: LLMConversationData[] = conversations.map(conv => ({
+            id: conv.id,
+            user_id: conv.user_id,
+            user_query: conv.user_query,
+            claude_response: conv.claude_response,
+            interaction_timestamp: conv.interaction_timestamp,
+            project_name: conv.project_name
+          }))
+
+          const llmResults = await analyzeConversations(llmConversations, {
+            enabled: true,
+            cacheMinutes: 15,
+            maxConversations: 50
+          })
+
+          // Merge LLM insights with basic status
+          activeTeamStatus = mergeAnalysis(activeTeamStatus, llmResults)
+        } catch (llmErr) {
+          console.error('LLM analysis failed:', llmErr)
+          // Continue with basic analysis
+        }
+      }
 
       setTeamStatus(activeTeamStatus)
       setLastUpdated(new Date())
@@ -256,10 +299,13 @@ export function useRubeTeamStatus() {
 
   return {
     teamStatus,
-    isLoading,
-    error,
+    isLoading: isLoading || isLLMAnalyzing,
+    error: error || llmError,
     lastUpdated,
-    refresh: fetchTeamStatus
+    refresh: fetchTeamStatus,
+    // LLM specific info
+    llmEnabled: enableLLM,
+    isLLMAnalyzing
   }
 }
 

@@ -10,19 +10,25 @@ import {
   AlertTriangle,
   CheckCircle,
   RefreshCw,
-  Circle
+  Circle,
+  Brain,
+  Toggle
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
+import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
-import { useRubeTeamStatusOptimized as useRubeTeamStatus, type DeveloperStatus, type DeveloperTask } from '@/hooks/useRubeTeamStatusOptimized'
+import { useRubeTeamStatus, type DeveloperStatus, type DeveloperTask } from '@/hooks/useRubeTeamStatus'
+import { useLLMToggle } from '@/hooks/useSimpleLLMAnalysis'
 
 export function LiveTeamStatusBoard() {
   const [autoRefresh, setAutoRefresh] = useState(true)
-  const { teamStatus, isLoading, error, lastUpdated, refresh, forceRefresh, cacheStatus } = useRubeTeamStatus()
+  const { llmEnabled, setLLMEnabled, showLLMInsights, setShowLLMInsights } = useLLMToggle(false)
+
+  const { teamStatus, isLoading, error, lastUpdated, refresh, isLLMAnalyzing } = useRubeTeamStatus(llmEnabled)
 
   // Auto-refresh effect
   useEffect(() => {
@@ -111,6 +117,32 @@ export function LiveTeamStatusBoard() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          {/* LLM Analysis Toggle */}
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 rounded-md border border-gray-700">
+            <Brain className="h-4 w-4 text-purple-400" />
+            <span className="text-sm text-gray-300">LLM Analysis</span>
+            <Switch
+              checked={llmEnabled}
+              onCheckedChange={setLLMEnabled}
+              className="data-[state=checked]:bg-purple-600"
+            />
+            {isLLMAnalyzing && (
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+            )}
+          </div>
+
+          {/* LLM Insights Toggle */}
+          {llmEnabled && (
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 rounded-md border border-gray-700">
+              <span className="text-xs text-gray-400">Show Insights</span>
+              <Switch
+                checked={showLLMInsights}
+                onCheckedChange={setShowLLMInsights}
+                size="sm"
+              />
+            </div>
+          )}
+
           <Button
             variant="outline"
             size="sm"
@@ -145,6 +177,11 @@ export function LiveTeamStatusBoard() {
               {teamStatus.filter(dev => dev.status === 'flow').length} in flow •
               {teamStatus.filter(dev => dev.status === 'problem_solving').length} problem solving •
               {teamStatus.filter(dev => dev.status === 'blocked').length} blocked
+              {llmEnabled && (
+                <span className="text-purple-400 ml-2">
+                  • AI Enhanced ({teamStatus.filter(dev => dev.llmInsights).length} analyzed)
+                </span>
+              )}
             </p>
           </div>
           <div className="flex items-center gap-6">
@@ -186,8 +223,56 @@ export function LiveTeamStatusBoard() {
                     <span className={cn("text-xs font-medium", getStatusLabel(developer.status).className)}>
                       {getStatusLabel(developer.status).text}
                     </span>
+                    {/* LLM Enhancement Indicator */}
+                    {llmEnabled && developer.llmInsights && (
+                      <div className="flex items-center gap-1">
+                        <Brain className="w-3 h-3 text-purple-400" />
+                        <span className="text-xs text-purple-300">
+                          {Math.round(developer.llmInsights.confidence * 100)}%
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <p className="text-sm text-gray-400 mt-1">{developer.statusMessage}</p>
+
+                  {/* LLM Insights Display */}
+                  {llmEnabled && showLLMInsights && developer.llmInsights && (
+                    <div className="mt-3 p-3 bg-purple-950/30 border border-purple-800/30 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-medium text-purple-300">AI Insights</span>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
+                            {developer.llmInsights.mood}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
+                            {developer.llmInsights.productivity}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {developer.llmInsights.keyTopics.length > 0 && (
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-400 mb-1">Key Topics:</p>
+                          <div className="flex gap-1 flex-wrap">
+                            {developer.llmInsights.keyTopics.map((topic, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs bg-gray-800 text-gray-300">
+                                {topic}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {developer.llmInsights.recommendations && developer.llmInsights.recommendations.length > 0 && (
+                        <div>
+                          <p className="text-xs text-gray-400 mb-1">Recommendations:</p>
+                          <p className="text-xs text-purple-200">
+                            {developer.llmInsights.recommendations[0]}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-4">
