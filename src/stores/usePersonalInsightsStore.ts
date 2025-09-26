@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import type { DeveloperProfile } from '@/types/analysis'
+import type { DailyRecapSummary } from '@/types/personalInsights'
 import type { ClaudeChatLog } from '@/hooks/useSupabase'
 import type { DevelopmentEvent, TimelineAnalysis } from '@/hooks/useDevelopmentTimeline'
 
@@ -22,6 +23,7 @@ interface PersonalInsightsState {
   activityMetrics: any | null
   developerProfiles: DeveloperProfile[] | null
   currentProfile: DeveloperProfile | null
+  dailySummary: DailyRecapSummary | null
 
   // Timeline data
   timelineEvents: DevelopmentEvent[]
@@ -62,6 +64,7 @@ interface PersonalInsightsState {
   setActivityMetrics: (metrics: any) => void
   setDeveloperProfiles: (profiles: DeveloperProfile[]) => void
   setCurrentProfile: (profile: DeveloperProfile | null) => void
+  setDailySummary: (summary: DailyRecapSummary | null) => void
   setTimelineEvents: (events: DevelopmentEvent[]) => void
   setTimelineAnalysis: (analysis: TimelineAnalysis | null) => void
   setTimeRange: (range: 'today' | 'week' | 'month' | 'all') => void
@@ -101,6 +104,7 @@ const usePersonalInsightsStore = create<PersonalInsightsState>()(
         activityMetrics: null,
         developerProfiles: null,
         currentProfile: null,
+        dailySummary: null,
         timelineEvents: [],
         timelineAnalysis: null,
         timeRange: 'week',
@@ -134,6 +138,7 @@ const usePersonalInsightsStore = create<PersonalInsightsState>()(
           currentProfile: profiles && profiles.length > 0 ? profiles[0] : null
         }),
         setCurrentProfile: (profile) => set({ currentProfile: profile }),
+        setDailySummary: (summary) => set({ dailySummary: summary }),
         setTimelineEvents: (events) => set({ timelineEvents: events }),
         setTimelineAnalysis: (analysis) => set({ timelineAnalysis: analysis }),
         setTimeRange: (range) => set({ timeRange: range }),
@@ -229,6 +234,7 @@ const usePersonalInsightsStore = create<PersonalInsightsState>()(
           activityMetrics: null,
           developerProfiles: null,
           currentProfile: null,
+          dailySummary: null,
           timelineEvents: [],
           timelineAnalysis: null,
           llmAnalysis: {

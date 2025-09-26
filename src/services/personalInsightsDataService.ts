@@ -3,6 +3,7 @@ import usePersonalInsightsStore from '@/stores/usePersonalInsightsStore'
 import type { ClaudeChatLog } from '@/hooks/useSupabase'
 import type { DeveloperProfile } from '@/types/analysis'
 import type { DevelopmentEvent, TimelineAnalysis } from '@/hooks/useDevelopmentTimeline'
+import { personalInsightsDailyRecapService } from '@/services/personalInsightsDailyRecap'
 
 // Request deduplication
 const pendingRequests = new Map<string, Promise<any>>()
@@ -400,6 +401,18 @@ export class PersonalInsightsDataService {
         this.fetchActivityMetrics(userId),
         this.fetchDeveloperProfiles(userId)
       ])
+
+      try {
+        const recap = await personalInsightsDailyRecapService.generateDailyRecap({
+          logs,
+          metrics
+        })
+
+        store.setDailySummary(recap)
+      } catch (recapError) {
+        console.error('Failed to build daily recap:', recapError)
+        store.setDailySummary(null)
+      }
 
       // Fetch timeline data
       const timeRange = this.getTimeRangeForStore()

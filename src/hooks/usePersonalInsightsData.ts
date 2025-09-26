@@ -16,7 +16,8 @@ export interface PersonalInsightsData {
     morning: string
     afternoon: string
     keyDecisions: string[]
-    abandoned: string
+    nextFocus: string
+    quickStats: Array<{ label: string; value: string }>
   }
 
   // Meta information
@@ -87,19 +88,34 @@ export function usePersonalInsightsData(options: UsePersonalInsightsDataOptions 
 
   // Memoized today's summary generation to prevent constant recalculation
   const todaysSummary = useMemo(() => {
-    if (!userLogs || !activityMetrics) {
+    const quickStats: Array<{ label: string; value: string }> = []
+
+    if (!activityMetrics || !userLogs) {
       return {
         morning: 'No recent activity found. Start a conversation with Claude Code to see insights!',
         afternoon: 'Loading recent development activity...',
         keyDecisions: [],
-        abandoned: 'Analysis pending'
+        nextFocus: 'Analysis pending',
+        quickStats
       }
     }
 
+    if (typeof activityMetrics.totalInteractions === 'number') {
+      quickStats.push({ label: 'Interactions', value: String(activityMetrics.totalInteractions) })
+    }
+
+    if (typeof activityMetrics.projectsWorkedOn === 'number') {
+      quickStats.push({ label: 'Projects', value: String(activityMetrics.projectsWorkedOn) })
+    }
+
+    if (typeof activityMetrics.completionRate === 'number') {
+      quickStats.push({ label: 'Completion', value: `${Math.round(activityMetrics.completionRate * 100)}%` })
+    }
+
+    const today = new Date().toDateString()
     const todayLogs = userLogs.filter(log => {
       const logDate = new Date(log.interaction_timestamp)
-      const today = new Date()
-      return logDate.toDateString() === today.toDateString()
+      return logDate.toDateString() === today
     })
 
     const morningLogs = todayLogs.filter(log => {
@@ -112,15 +128,19 @@ export function usePersonalInsightsData(options: UsePersonalInsightsDataOptions 
       return hour >= 12 && hour < 18
     })
 
+    const focusTopic = activityMetrics.topicFrequency?.[0] || 'general development'
+    const secondaryTopic = activityMetrics.topicFrequency?.[1] || focusTopic
+
     return {
-      morning: morningLogs.length > 0 ?
-        `Worked on ${morningLogs.length} development tasks, focusing on ${activityMetrics.topicFrequency?.[0] || 'general development'}` :
-        'No morning activity recorded today',
-      afternoon: afternoonLogs.length > 0 ?
-        `Continued with ${afternoonLogs.length} development discussions, emphasizing ${activityMetrics.topicFrequency?.[1] || 'problem solving'}` :
-        'No afternoon activity recorded today',
+      morning: morningLogs.length > 0
+        ? `Worked through ${morningLogs.length} conversations, centering on ${focusTopic}.`
+        : 'No morning activity recorded yet.',
+      afternoon: afternoonLogs.length > 0
+        ? `Continued with ${afternoonLogs.length} interactions, shifting toward ${secondaryTopic}.`
+        : 'Afternoon updates will appear as new activity arrives.',
       keyDecisions: currentProfile?.problem_solving_patterns?.slice(0, 2) || [],
-      abandoned: currentProfile?.growth_areas?.[0] || 'No abandoned tasks identified'
+      nextFocus: currentProfile?.growth_areas?.[0] || 'No follow-up items identified',
+      quickStats
     }
   }, [userLogs, activityMetrics, currentProfile])
 

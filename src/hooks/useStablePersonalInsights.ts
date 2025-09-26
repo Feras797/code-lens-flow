@@ -30,7 +30,8 @@ interface UseStablePersonalInsightsReturn {
     morning: string
     afternoon: string
     keyDecisions: string[]
-    abandoned: string
+    nextFocus: string
+    quickStats: Array<{ label: string; value: string }>
   }
 
   // LLM Analysis
@@ -170,19 +171,44 @@ export function useStablePersonalInsights(
 
   // Memoized today's summary
   const todaysSummary = useMemo(() => {
-    if (!store.userLogs || !store.activityMetrics) {
+    if (store.dailySummary) {
+      return {
+        morning: store.dailySummary.morning,
+        afternoon: store.dailySummary.afternoon,
+        keyDecisions: store.dailySummary.keyDecisions,
+        nextFocus: store.dailySummary.nextFocus,
+        quickStats: store.dailySummary.quickStats
+      }
+    }
+
+    const quickStats: Array<{ label: string; value: string }> = []
+
+    if (typeof store.activityMetrics?.totalInteractions === 'number') {
+      quickStats.push({ label: 'Interactions', value: String(store.activityMetrics.totalInteractions) })
+    }
+
+    if (typeof store.activityMetrics?.projectsWorkedOn === 'number') {
+      quickStats.push({ label: 'Projects', value: String(store.activityMetrics.projectsWorkedOn) })
+    }
+
+    if (typeof store.activityMetrics?.completionRate === 'number') {
+      quickStats.push({ label: 'Completion', value: `${Math.round(store.activityMetrics.completionRate * 100)}%` })
+    }
+
+    if (!store.userLogs) {
       return {
         morning: 'No recent activity found. Start a conversation with Claude Code to see insights!',
         afternoon: 'Loading recent development activity...',
         keyDecisions: [],
-        abandoned: 'Analysis pending'
+        nextFocus: 'Analysis pending',
+        quickStats
       }
     }
 
+    const today = new Date().toDateString()
     const todayLogs = store.userLogs.filter(log => {
       const logDate = new Date(log.interaction_timestamp)
-      const today = new Date()
-      return logDate.toDateString() === today.toDateString()
+      return logDate.toDateString() === today
     })
 
     const morningLogs = todayLogs.filter(log => {
@@ -195,17 +221,21 @@ export function useStablePersonalInsights(
       return hour >= 12 && hour < 18
     })
 
+    const focusTopic = store.activityMetrics?.topicFrequency?.[0] || 'general development'
+    const secondaryTopic = store.activityMetrics?.topicFrequency?.[1] || focusTopic
+
     return {
-      morning: morningLogs.length > 0 ?
-        `Worked on ${morningLogs.length} development tasks, focusing on ${store.activityMetrics.topicFrequency?.[0] || 'general development'}` :
-        'No morning activity recorded today',
-      afternoon: afternoonLogs.length > 0 ?
-        `Continued with ${afternoonLogs.length} development discussions, emphasizing ${store.activityMetrics.topicFrequency?.[1] || 'problem solving'}` :
-        'No afternoon activity recorded today',
+      morning: morningLogs.length > 0
+        ? `Worked through ${morningLogs.length} conversations, centering on ${focusTopic}.`
+        : 'No morning activity recorded yet.',
+      afternoon: afternoonLogs.length > 0
+        ? `Continued with ${afternoonLogs.length} interactions, shifting toward ${secondaryTopic}.`
+        : 'Afternoon updates will appear as new activity arrives.',
       keyDecisions: store.currentProfile?.problem_solving_patterns?.slice(0, 2) || [],
-      abandoned: store.currentProfile?.growth_areas?.[0] || 'No abandoned tasks identified'
+      nextFocus: store.currentProfile?.growth_areas?.[0] || 'No follow-up items identified',
+      quickStats
     }
-  }, [store.userLogs, store.activityMetrics, store.currentProfile])
+  }, [store.dailySummary, store.userLogs, store.activityMetrics, store.currentProfile])
 
   // Stable actions
   const refresh = useCallback(async () => {

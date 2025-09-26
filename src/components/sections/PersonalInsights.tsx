@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react'
-import { Clock, ChevronRight, Calendar, Zap, Target, ChevronDown, ChevronUp, Brain, Sparkles, RefreshCw, AlertCircle } from 'lucide-react'
+import { Clock, ChevronRight, Calendar, ChevronDown, ChevronUp, Brain, Sparkles, RefreshCw, AlertCircle } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -33,7 +33,6 @@ export const PersonalInsights = memo(function PersonalInsights({
     expandedSections,
     autoRefresh,
     userLogs,
-    activityMetrics,
     refresh,
     runLLMAnalysis,
     toggleExpandedSection,
@@ -144,12 +143,16 @@ export const PersonalInsights = memo(function PersonalInsights({
                 <Calendar className="w-5 h-5 text-muted-foreground" />
                 <h2 className="text-lg font-semibold text-foreground">Today's Development Recap</h2>
               </div>
-              <div className="flex items-center gap-2">
-                {activityMetrics && (
-                  <Badge variant="outline" className="text-xs bg-background/50 text-muted-foreground border-border">
-                    {activityMetrics.totalInteractions} interactions
+              <div className="flex items-center gap-2 flex-wrap">
+                {todaysSummary.quickStats.map((stat, index) => (
+                  <Badge
+                    key={`${stat.label}-${index}`}
+                    variant="outline"
+                    className="text-xs bg-background/50 text-muted-foreground border-border"
+                  >
+                    {stat.label}: {stat.value}
                   </Badge>
-                )}
+                ))}
                 {currentProfile && (
                   <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-400 border-purple-500/20">
                     AI Analyzed
@@ -182,10 +185,6 @@ export const PersonalInsights = memo(function PersonalInsights({
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {todaysSummary.morning}
                     </p>
-                    <div className="flex items-center gap-2">
-                      <Target className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">Performance optimization focus</span>
-                    </div>
                   </div>
                 )}
               </div>
@@ -213,10 +212,6 @@ export const PersonalInsights = memo(function PersonalInsights({
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {todaysSummary.afternoon}
                     </p>
-                    <div className="flex items-center gap-2">
-                      <Zap className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">Architecture improvements</span>
-                    </div>
                   </div>
                 )}
               </div>
@@ -261,25 +256,25 @@ export const PersonalInsights = memo(function PersonalInsights({
               <div className="space-y-3">
                 <div
                   className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-background/30 transition-colors cursor-pointer"
-                  onClick={() => toggleExpandedSection('abandoned')}
+                  onClick={() => toggleExpandedSection('nextFocus')}
                 >
                   <div className="flex items-center gap-3">
                     <Badge variant="outline" className="text-xs bg-background/50 text-muted-foreground border-border">
-                      Abandoned
+                      Next Focus
                     </Badge>
                     <span className="text-xs text-muted-foreground">Learning opportunity</span>
                   </div>
-                  {expandedSections.has('abandoned') ? (
+                  {expandedSections.has('nextFocus') ? (
                     <ChevronUp className="h-4 w-4 text-muted-foreground" />
                   ) : (
                     <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   )}
                 </div>
-                {expandedSections.has('abandoned') && (
+                {expandedSections.has('nextFocus') && (
                   <div className="ml-6">
                     <div className="p-3 rounded-lg bg-background/50 border border-border">
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        {todaysSummary.abandoned}
+                        {todaysSummary.nextFocus}
                       </p>
                     </div>
                   </div>

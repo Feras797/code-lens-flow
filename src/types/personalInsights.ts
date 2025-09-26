@@ -58,6 +58,17 @@ export interface DigestCacheEntry {
   conversations_analyzed: number
 }
 
+export interface DailyRecapSummary {
+  morning: string
+  afternoon: string
+  keyDecisions: string[]
+  nextFocus: string
+  quickStats: Array<{
+    label: string
+    value: string
+  }>
+}
+
 // Options for digest generation
 export interface DigestOptions {
   enabled: boolean
