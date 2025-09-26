@@ -123,8 +123,8 @@ const developers: Developer[] = [
       },
       {
         id: '2-4',
-        task: 'Payment dashboard',
-        file: 'components/PaymentDashboard.tsx',
+        task: 'Payment home',
+        file: 'components/PaymentHome.tsx',
         duration: '10 min',
         messages: 2,
         commits: 0,

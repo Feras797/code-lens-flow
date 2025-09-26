@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dashboard } from '@/components/Dashboard';
+import { Home } from '@/components/Dashboard';
 import { ProjectView } from '@/components/ProjectView';
 import { Project } from '@/types';
 
@@ -19,7 +19,7 @@ const Index = () => {
       {selectedProject ? (
         <ProjectView project={selectedProject} onBack={handleBack} />
       ) : (
-        <Dashboard onProjectSelect={handleProjectSelect} />
+        <Home onProjectSelect={handleProjectSelect} />
       )}
     </div>
   );

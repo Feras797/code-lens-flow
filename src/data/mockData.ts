@@ -92,7 +92,7 @@ export const mockProjects: Project[] = [
   },
   {
     id: '3',
-    name: 'CRM Dashboard',
+    name: 'CRM Home',
     activeDevelopers: 4,
     statusDistribution: { active: 4, slow: 0, blocked: 0 },
     lastRefresh: '1 min ago',

@@ -1,7 +1,7 @@
-# Code-Lens-Flow: Comprehensive shadcn/ui Transformation Plan
+# Code-Dashboard-Flow: Comprehensive shadcn/ui Transformation Plan
 
 ## Overview
-Transform the Code-Lens-Flow project components into proper shadcn/ui components with consistent styling while maintaining the existing stealth black theme and functionality. The project already has a sophisticated design system in place, but needs better consistency and proper shadcn patterns.
+Transform the Code-Dashboard-Flow project components into proper shadcn/ui components with consistent styling while maintaining the existing stealth black theme and functionality. The project already has a sophisticated design system in place, but needs better consistency and proper shadcn patterns.
 
 ## Current State Analysis
 

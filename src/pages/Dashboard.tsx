@@ -16,7 +16,7 @@ import RecentCollisions from '@/components/dashboard/RecentCollisions'
 import { MetricCard } from '@/components/dashboard/MetricCard'
 import MCPSetupButton from '@/components/setup/MCPSetupButton'
 
-function Dashboard () {
+function Home () {
   const [activeTab, setActiveTab] = useState('resolve')
 
   return (
@@ -24,7 +24,7 @@ function Dashboard () {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-3xl font-bold text-foreground'>Dashboard</h1>
+          <h1 className='text-3xl font-bold text-foreground'>Home</h1>
           <p className='text-muted-foreground mt-1'>
             Real-time development team coordination
           </p>
@@ -157,4 +157,4 @@ function Dashboard () {
   )
 }
 
-export default Dashboard
+export default Home

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider } from 'next-themes'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProjectProvider } from './contexts/ProjectContext'
-import Dashboard from './pages/Dashboard'
+import Home from './pages/Dashboard'
 import TeamStatus from './pages/TeamStatus'
 import PersonalInsights from './pages/PersonalInsights'
 import DevelopmentCoach from './pages/DevelopmentCoach'
@@ -44,7 +44,7 @@ function AppContent () {
 
       {/* Project-specific routes (with top navigation) */}
       <Route path="/project/:projectId" element={<ProjectLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Home />} />
         <Route path="team-status" element={<TeamStatus />} />
         <Route path="insights" element={<PersonalInsights />} />
         <Route path="coach" element={<DevelopmentCoach />} />

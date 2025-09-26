@@ -50,7 +50,7 @@ function ProjectSelector() {
     navigate(`/project/${project.id}/dashboard`)
   }
 
-  const isCodeLensFlow = (project: Project) => project.name === 'Code Lens Flow'
+  const isCodeDashboardFlow = (project: Project) => project.name === 'Code Lens Flow'
 
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
@@ -153,7 +153,7 @@ function ProjectSelector() {
                   key={project.id}
                   className={cn(
                     "transition-all duration-200",
-                    isCodeLensFlow(project)
+                    isCodeDashboardFlow(project)
                       ? "cursor-pointer hover:shadow-md hover:border-primary/50"
                       : "opacity-50 cursor-not-allowed"
                   )}
@@ -178,7 +178,7 @@ function ProjectSelector() {
                           </div>
                         </div>
                       </div>
-                      {isCodeLensFlow(project) && (
+                      {isCodeDashboardFlow(project) && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -255,7 +255,7 @@ function ProjectSelector() {
                 key={project.id}
                 className={cn(
                   "transition-all duration-200",
-                  isCodeLensFlow(project)
+                  isCodeDashboardFlow(project)
                     ? "cursor-pointer hover:shadow-md hover:border-primary/50"
                     : "opacity-50 cursor-not-allowed"
                 )}
@@ -287,7 +287,7 @@ function ProjectSelector() {
                         </div>
                       </div>
                     </div>
-                    {isCodeLensFlow(project) && (
+                    {isCodeDashboardFlow(project) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">

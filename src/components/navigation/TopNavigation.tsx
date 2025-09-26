@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 
 const navigationItems: ProjectNavItem[] = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     href: '/dashboard',
     icon: LayoutDashboard,
     step: 1,

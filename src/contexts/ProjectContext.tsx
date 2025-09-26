@@ -30,7 +30,7 @@ const mockProjects: Project[] = [
   },
   {
     id: '2',
-    name: 'Analytics Dashboard',
+    name: 'Analytics Home',
     description: 'Business intelligence and reporting system',
     createdAt: new Date('2024-02-01'),
     updatedAt: new Date('2024-02-20'),

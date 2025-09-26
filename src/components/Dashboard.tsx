@@ -8,11 +8,11 @@ import { ProjectCard } from '@/components/ProjectCard';
 import { mockProjects } from '@/data/mockData';
 import { Project } from '@/types';
 
-interface DashboardProps {
+interface HomeProps {
   onProjectSelect: (project: Project) => void;
 }
 
-export function Dashboard({ onProjectSelect }: DashboardProps) {
+export function Home({ onProjectSelect }: HomeProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [projects] = useState<Project[]>(mockProjects);
 
@@ -42,7 +42,7 @@ export function Dashboard({ onProjectSelect }: DashboardProps) {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-foreground tracking-tight">
-                    Lense Analytics
+                    Home Analytics
                   </h1>
                   <p className="text-sm text-foreground-muted">
                     AI-powered development team coordination through Claude Code chat analysis
@@ -104,7 +104,7 @@ export function Dashboard({ onProjectSelect }: DashboardProps) {
         </div>
       )}
 
-      {/* Main Dashboard Content */}
+      {/* Main Home Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {/* Key Metrics Overview */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">

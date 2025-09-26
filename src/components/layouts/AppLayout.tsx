@@ -48,7 +48,7 @@ function AppLayout() {
             {/* Logo */}
             <div className='flex items-center gap-8'>
               <span className='text-2xl font-bold text-white' style={{ fontFamily: '"Neue Haas Grotesk Display Pro", "Helvetica Neue", Arial, sans-serif' }}>
-                Lens
+                Home
               </span>
             </div>
 

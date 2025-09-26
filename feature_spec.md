@@ -1,9 +1,9 @@
-# Code-Lens-Flow: AI-Powered Development Team Coordination Platform
+# Code-Dashboard-Flow: AI-Powered Development Team Coordination Platform
 ## Feature Specification
 
 ### Product Overview
 
-**Code-Lens-Flow** is a real-time development team coordination platform that transforms Claude Code conversations into actionable intelligence for preventing conflicts, optimizing productivity, and building collective team knowledge.
+**Code-Dashboard-Flow** is a real-time development team coordination platform that transforms Claude Code conversations into actionable intelligence for preventing conflicts, optimizing productivity, and building collective team knowledge.
 
 **Value Proposition**: Conversation-driven development intelligence - turning natural AI-assisted coding sessions into structured team insights, conflict prevention, and knowledge management.
 
