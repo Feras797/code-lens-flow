@@ -34,6 +34,12 @@ export interface DetailedLLMInsights {
   confidence: number
 }
 
+export interface TicketSummaryResult {
+  summary: string
+  risk: 'low' | 'medium' | 'high'
+  key_points: string[]
+}
+
 export class SimpleLLMAnalysis {
   private llm: ChatOpenAI
 
@@ -73,6 +79,69 @@ export class SimpleLLMAnalysis {
     }
 
     return results
+  }
+
+  async summarizeTicket(input: {
+    title: string
+    description: string
+    status?: 'high' | 'medium' | 'low'
+    filePath?: string
+  }): Promise<TicketSummaryResult> {
+    const { title, description, status, filePath } = input
+
+    try {
+      const prompt = PromptTemplate.fromTemplate(`
+You are an engineering lead. Write a crisp high-level summary for a development ticket based on the title and description. Keep it executive-friendly and action-oriented.
+
+Return ONLY valid JSON with exactly these fields:
+{
+  "summary": "2–3 sentence high-level recap of what's happening and why it matters",
+  "risk": "low|medium|high",
+  "key_points": ["short point 1", "short point 2", "short point 3"]
+}
+
+Context:
+Title: {title}
+Description: {description}
+Priority: {status}
+File: {filePath}
+`)
+
+      const chain = prompt.pipe(this.llm)
+      const result = await chain.invoke({
+        title,
+        description,
+        status: status || 'medium',
+        filePath: filePath || 'N/A'
+      })
+
+      const parsed = JSON.parse(result.content as string)
+      return {
+        summary: parsed.summary || 'Working on this item; additional context forthcoming.',
+        risk: parsed.risk || (status || 'medium'),
+        key_points: parsed.key_points || []
+      }
+    } catch (error) {
+      console.error('summarizeTicket fallback:', error)
+      // Heuristic fallback
+      const text = `${title} ${description}`.toLowerCase()
+      const isError = /error|fail|500|bug|exception|crash/.test(text)
+      const isProd = /prod|production/.test(text)
+      const risk: 'low' | 'medium' | 'high' = (status || (isError ? (isProd ? 'high' : 'medium') : 'low')) as any
+
+      const points: string[] = []
+      if (isError) points.push('Issue likely error-related')
+      if (isProd) points.push('May affect production environment')
+      if (filePath) points.push(`Touches ${filePath}`)
+
+      return {
+        summary: isError
+          ? 'Ticket indicates an error scenario requiring targeted debugging. Scope appears constrained to the referenced area; prioritize verification in the affected environment.'
+          : 'Ticket describes ongoing implementation work. Next step is to progress the task and validate acceptance criteria.',
+        risk,
+        key_points: points.slice(0, 3)
+      }
+    }
   }
 
   async generateDetailedInsights(userId: string, conversations: ConversationData[]): Promise<DetailedLLMInsights> {

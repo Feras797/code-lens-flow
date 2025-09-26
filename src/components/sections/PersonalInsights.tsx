@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react'
-import { Clock, ChevronRight, Calendar, Zap, Target, Activity, ChevronDown, ChevronUp, Brain, Sparkles, RefreshCw, MessageSquare, AlertCircle } from 'lucide-react'
+import { Clock, ChevronRight, Calendar, Zap, Target, ChevronDown, ChevronUp, Brain, Sparkles, RefreshCw, AlertCircle } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -31,14 +31,12 @@ export const PersonalInsights = memo(function PersonalInsights({
     error,
     lastRefresh,
     expandedSections,
-    enableLLMAnalysis,
     autoRefresh,
     userLogs,
     activityMetrics,
     refresh,
     runLLMAnalysis,
     toggleExpandedSection,
-    setEnableLLMAnalysis,
     setAutoRefresh,
     formatTimeAgo
   } = useStablePersonalInsights({
@@ -87,20 +85,6 @@ export const PersonalInsights = memo(function PersonalInsights({
           )}
         </div>
         <div className="flex items-center gap-2">
-          {/* LLM Analysis Toggle */}
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-background rounded-md border border-border">
-            <Brain className="h-4 w-4 text-purple-400" />
-            <span className="text-sm text-muted-foreground">AI Analysis</span>
-            <Switch
-              checked={enableLLMAnalysis}
-              onCheckedChange={setEnableLLMAnalysis}
-              className="data-[state=checked]:bg-purple-600"
-            />
-            {isAnalyzing && (
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
-            )}
-          </div>
-
           {/* Auto Refresh Toggle */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-background rounded-md border border-border">
             <span className="text-xs text-muted-foreground">Auto Refresh</span>
@@ -131,9 +115,9 @@ export const PersonalInsights = memo(function PersonalInsights({
 
           <Button
             onClick={handleAnalysisClick}
-            disabled={isAnalyzing || !enableLLMAnalysis}
-            variant="outline"
-            className="hover:bg-purple-500/10 border-purple-500/30"
+            disabled={isAnalyzing}
+            variant="default"
+            className="bg-purple-600 hover:bg-purple-700 border border-purple-500/60 text-white"
           >
             {isAnalyzing ? (
               <>

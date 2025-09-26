@@ -213,7 +213,7 @@ export function useStablePersonalInsights(
   }, [userId, projectId])
 
   const runLLMAnalysis = useCallback(async () => {
-    if (!store.enableLLMAnalysis || !digestServiceRef.current) return
+    if (!digestServiceRef.current) return
 
     store.setIsAnalyzing(true)
     store.setError(null)
@@ -250,7 +250,7 @@ export function useStablePersonalInsights(
     } finally {
       store.setIsAnalyzing(false)
     }
-  }, [userId, projectId, store.enableLLMAnalysis, store.timelineEvents, store.userLogs, dateRange])
+  }, [userId, projectId, store.timelineEvents, store.userLogs, dateRange])
 
   const toggleExpandedSection = useCallback((section: string) => {
     store.toggleExpandedSection(section)

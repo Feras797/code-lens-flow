@@ -164,7 +164,7 @@ export class PersonalInsightsDataService {
         return profiles
       } catch (error) {
         console.error('Error fetching developer profiles:', error)
-        store.setError(error instanceof Error ? error.message : 'Failed to fetch developer profiles')
+        // Soft-fail so the UI can continue rendering without surfacing a destructive error
         return []
       }
     })
