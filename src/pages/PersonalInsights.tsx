@@ -1,7 +1,22 @@
-import { TrendingUp, Clock, Target, Zap, Calendar, BarChart3 } from 'lucide-react'
-import { Line, LineChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { TrendingUp, Zap, Calendar, BarChart3 } from 'lucide-react'
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { useEffect, useState } from 'react'
 
 function PersonalInsights () {
+  const [metrics, setMetrics] = useState<any | null>(null)
+  const [patternData, setPatternData] = useState<Array<{name:string;count:number}>>([])
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/metrics/performance')
+      .then(r => r.json())
+      .then((m) => {
+        setMetrics(m)
+        const counts = m?.pattern_counts || {}
+        const arr = Object.keys(counts).map(k => ({ name: k.replace(/_/g,' '), count: counts[k] }))
+        setPatternData(arr)
+      })
+      .catch(() => {})
+  }, [])
   const focusData = [
     { week: 'Week 1', progress: 100, label: 'Basic setup and components' },
     { week: 'Week 2', progress: 100, label: 'Feature implementation' },
@@ -32,40 +47,41 @@ function PersonalInsights () {
         </p>
       </div>
 
-      {/* Today's Recap */}
-      <div className='bg-card border border-border rounded-xl p-6'>
-        <h2 className='text-lg font-semibold text-foreground mb-4 flex items-center gap-2'>
-          <Calendar className='h-5 w-5' />
-          Today's Development Recap
-        </h2>
-        <div className='space-y-4'>
-          <div>
-            <h3 className='text-sm font-medium text-foreground mb-2'>Morning</h3>
-            <p className='text-sm text-muted-foreground'>
-              Completed user profile component with React.memo optimization
-            </p>
-          </div>
-          <div>
-            <h3 className='text-sm font-medium text-foreground mb-2'>Afternoon</h3>
-            <p className='text-sm text-muted-foreground'>
-              Building admin dashboard, switched Chart.js → Recharts
-            </p>
-          </div>
-          <div>
-            <h3 className='text-sm font-medium text-foreground mb-2'>Key Decisions</h3>
-            <ul className='space-y-1'>
-              <li className='text-sm text-muted-foreground'>• Chose Context over prop drilling for state management</li>
-              <li className='text-sm text-muted-foreground'>• Deferred complex filtering to backend</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className='text-sm font-medium text-red-500 mb-2'>Abandoned</h3>
-            <p className='text-sm text-muted-foreground'>
-              Custom chart solution (too time-consuming)
-            </p>
+      {/* Summary (from metrics) */}
+      {metrics && (
+        <div className='bg-card border border-border rounded-xl p-6'>
+          <h2 className='text-lg font-semibold text-foreground mb-4 flex items-center gap-2'>
+            <Calendar className='h-5 w-5' />
+            Personal Analytics Summary
+          </h2>
+          <div className='grid grid-cols-2 md:grid-cols-3 gap-3 text-sm'>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Total Prompts</div>
+              <div className='text-foreground font-semibold'>{metrics.total_prompts}</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Anti‑Pattern Rate</div>
+              <div className='text-foreground font-semibold'>{(metrics.anti_pattern_rate*100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Context Usage</div>
+              <div className='text-foreground font-semibold'>{(metrics.context_usage_rate*100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Avg Prompt Length</div>
+              <div className='text-foreground font-semibold'>{metrics.avg_prompt_length}</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Iteration Efficiency</div>
+              <div className='text-foreground font-semibold'>{(metrics.estimated_iteration_efficiency*100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Revert Risk (proxy)</div>
+              <div className='text-foreground font-semibold'>{(metrics.revert_risk_proxy*100).toFixed(1)}%</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Project Focus Evolution */}
       <div className='bg-card border border-border rounded-xl p-6'>
@@ -118,22 +134,26 @@ function PersonalInsights () {
         </div>
       </div>
 
-      {/* Pattern Recognition */}
-      <div className='bg-card border border-border rounded-xl p-6'>
-        <h2 className='text-lg font-semibold text-foreground mb-4 flex items-center gap-2'>
-          <Zap className='h-5 w-5' />
-          Pattern Recognition
-        </h2>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          {patterns.map((pattern, index) => (
-            <div key={index} className='bg-background/50 rounded-lg p-4'>
-              <div className='text-2xl mb-2'>{pattern.icon}</div>
-              <h3 className='text-sm font-medium text-foreground mb-1'>{pattern.title}</h3>
-              <p className='text-xs text-muted-foreground'>{pattern.desc}</p>
-            </div>
-          ))}
+      {/* Pattern Recognition (from counts) */}
+      {metrics && (
+        <div className='bg-card border border-border rounded-xl p-6'>
+          <h2 className='text-lg font-semibold text-foreground mb-4 flex items-center gap-2'>
+            <Zap className='h-5 w-5' />
+            Anti‑Pattern Frequencies
+          </h2>
+          <div className='h-64'>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={patternData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" hide={false} interval={0} angle={-15} height={50} textAnchor='end' />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#3b82f6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

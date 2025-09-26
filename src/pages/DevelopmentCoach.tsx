@@ -1,6 +1,13 @@
 import { Brain, TrendingUp, AlertCircle, CheckCircle, XCircle, Target } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 function DevelopmentCoach () {
+  const [perf, setPerf] = useState<any | null>(null)
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/metrics/performance')
+      .then(r => r.json()).then(setPerf).catch(() => {})
+  }, [])
   const antiPatterns = [
     {
       name: 'Hail Mary Pattern',
@@ -79,6 +86,42 @@ function DevelopmentCoach () {
           Identify and fix your personal anti-patterns based on chat analysis
         </p>
       </div>
+
+      {/* Performance Metrics */}
+      {perf && (
+        <div className='bg-card border border-border rounded-xl p-6'>
+          <h2 className='text-lg font-semibold text-foreground mb-4 flex items-center gap-2'>
+            <TrendingUp className='h-5 w-5' />
+            Prompt Performance (from .claude)
+          </h2>
+          <div className='grid grid-cols-2 md:grid-cols-3 gap-3 text-sm'>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Total Prompts</div>
+              <div className='text-foreground font-semibold'>{perf.total_prompts}</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Anti-Pattern Rate</div>
+              <div className='text-foreground font-semibold'>{(perf.anti_pattern_rate * 100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Context Usage</div>
+              <div className='text-foreground font-semibold'>{(perf.context_usage_rate * 100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Avg Prompt Length</div>
+              <div className='text-foreground font-semibold'>{perf.avg_prompt_length}</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Iteration Efficiency</div>
+              <div className='text-foreground font-semibold'>{(perf.estimated_iteration_efficiency * 100).toFixed(1)}%</div>
+            </div>
+            <div className='bg-background border border-border rounded-lg p-3'>
+              <div className='text-muted-foreground'>Revert Risk (proxy)</div>
+              <div className='text-foreground font-semibold'>{(perf.revert_risk_proxy * 100).toFixed(1)}%</div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       {/* Anti-Patterns */}
