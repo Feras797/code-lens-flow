@@ -1,11 +1,7 @@
 import { PersonalInsights } from '@/components/sections/PersonalInsights'
 
 function PersonalInsightsPage() {
-  return (
-    <div className='p-6'>
-      <PersonalInsights />
-    </div>
-  )
+  return <PersonalInsights />
 }
 
 export default PersonalInsightsPage

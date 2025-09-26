@@ -23,12 +23,15 @@ import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
 import { useRubeTeamStatus, type DeveloperStatus, type DeveloperTask } from '@/hooks/useRubeTeamStatus'
 import { useLLMToggle } from '@/hooks/useSimpleLLMAnalysis'
+import { DeveloperDetailModal } from './DeveloperDetailModal'
+import { TaskDetailModal } from './TaskDetailModal'
+import type { ConversationData } from '@/services/simpleLLMAnalysis'
 
 export function LiveTeamStatusBoard() {
   const [autoRefresh, setAutoRefresh] = useState(true)
   const { llmEnabled, setLLMEnabled, showLLMInsights, setShowLLMInsights } = useLLMToggle(false)
 
-  const { teamStatus, isLoading, error, lastUpdated, refresh, isLLMAnalyzing } = useRubeTeamStatus(llmEnabled)
+  const { teamStatus, conversations, isLoading, error, lastUpdated, refresh, isLLMAnalyzing } = useRubeTeamStatus(llmEnabled)
 
   // Auto-refresh effect
   useEffect(() => {
@@ -86,6 +89,16 @@ export function LiveTeamStatusBoard() {
     return `${Math.floor(seconds / 86400)} days ago`
   }
 
+  // Convert conversations to the format expected by the modal
+  const modalConversations: ConversationData[] = conversations.map(conv => ({
+    id: conv.id,
+    user_id: conv.user_id,
+    user_query: conv.user_query,
+    claude_response: conv.claude_response,
+    interaction_timestamp: conv.interaction_timestamp,
+    project_name: conv.project_name
+  }))
+
   // Show loading state
   if (isLoading && teamStatus.length === 0) {
     return (
@@ -138,7 +151,7 @@ export function LiveTeamStatusBoard() {
               <Switch
                 checked={showLLMInsights}
                 onCheckedChange={setShowLLMInsights}
-                size="sm"
+                className="data-[state=checked]:bg-purple-600"
               />
             </div>
           )}
@@ -178,8 +191,14 @@ export function LiveTeamStatusBoard() {
               {teamStatus.filter(dev => dev.status === 'problem_solving').length} problem solving •
               {teamStatus.filter(dev => dev.status === 'blocked').length} blocked
               {llmEnabled && (
-                <span className="text-purple-400 ml-2">
-                  • AI Enhanced ({teamStatus.filter(dev => dev.llmInsights).length} analyzed)
+                <span className="text-purple-400 ml-2 flex items-center gap-1">
+                  • AI Enhanced ({teamStatus.filter(dev => dev.llmInsights).length}/{teamStatus.length} analyzed)
+                  {isLLMAnalyzing && (
+                    <div className="flex items-center gap-1">
+                      <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
+                      <span className="text-xs">analyzing...</span>
+                    </div>
+                  )}
                 </span>
               )}
             </p>
@@ -206,137 +225,118 @@ export function LiveTeamStatusBoard() {
 
       {/* Developer Cards */}
       {teamStatus.map((developer) => (
-        <Card key={developer.id} className="bg-gray-900 border-gray-800">
-          <CardHeader className="pb-4">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={developer.avatar} />
-                  <AvatarFallback className="bg-gray-800 text-white">
-                    {developer.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold text-white">{developer.name}</h3>
-                    {getStatusIcon(developer.status)}
-                    <span className={cn("text-xs font-medium", getStatusLabel(developer.status).className)}>
-                      {getStatusLabel(developer.status).text}
-                    </span>
-                    {/* LLM Enhancement Indicator */}
-                    {llmEnabled && developer.llmInsights && (
-                      <div className="flex items-center gap-1">
-                        <Brain className="w-3 h-3 text-purple-400" />
-                        <span className="text-xs text-purple-300">
-                          {Math.round(developer.llmInsights.confidence * 100)}%
+        <DeveloperDetailModal
+          key={developer.id}
+          developer={developer}
+          conversations={modalConversations}
+          trigger={
+            <Card className="bg-gray-900 border-gray-800 cursor-pointer hover:border-gray-600 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-200 group">
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={developer.avatar} />
+                      <AvatarFallback className="bg-gray-800 text-white">
+                        {developer.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold text-white group-hover:text-purple-100 transition-colors">{developer.name}</h3>
+                        {getStatusIcon(developer.status)}
+                        <span className={cn("text-xs font-medium", getStatusLabel(developer.status).className)}>
+                          {getStatusLabel(developer.status).text}
                         </span>
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-400 mt-1">{developer.statusMessage}</p>
-
-                  {/* LLM Insights Display */}
-                  {llmEnabled && showLLMInsights && developer.llmInsights && (
-                    <div className="mt-3 p-3 bg-purple-950/30 border border-purple-800/30 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-purple-300">AI Insights</span>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
-                            {developer.llmInsights.mood}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
-                            {developer.llmInsights.productivity}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      {developer.llmInsights.keyTopics.length > 0 && (
-                        <div className="mb-2">
-                          <p className="text-xs text-gray-400 mb-1">Key Topics:</p>
-                          <div className="flex gap-1 flex-wrap">
-                            {developer.llmInsights.keyTopics.map((topic, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs bg-gray-800 text-gray-300">
-                                {topic}
-                              </Badge>
-                            ))}
+                        {/* LLM Enhancement Indicator */}
+                        {llmEnabled && developer.llmInsights && (
+                          <div className="flex items-center gap-1">
+                            <Brain className="w-3 h-3 text-purple-400" />
+                            <span className="text-xs text-purple-300">
+                              {Math.round(developer.llmInsights.confidence * 100)}%
+                            </span>
                           </div>
-                        </div>
-                      )}
-
-                      {developer.llmInsights.recommendations && developer.llmInsights.recommendations.length > 0 && (
-                        <div>
-                          <p className="text-xs text-gray-400 mb-1">Recommendations:</p>
-                          <p className="text-xs text-purple-200">
-                            {developer.llmInsights.recommendations[0]}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-gray-400">
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="text-sm">{developer.completedTasks}</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-400">
-                  <GitBranch className="w-4 h-4" />
-                  <span className="text-sm">{developer.totalTasks}</span>
-                </div>
-                <div className="text-sm text-gray-500">
-                  {developer.completedTasks} tasks
-                </div>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              {developer.currentTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="text-sm font-medium text-white">{task.title}</h4>
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-xs", getTaskStatusBadge(task.status))}
-                    >
-                      {task.status}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-gray-400 mb-3">{task.description}</p>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                    <FileCode className="w-3 h-3" />
-                    <code className="font-mono">{task.filePath}</code>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1 text-gray-400">
-                        <Clock className="w-3 h-3" />
-                        <span className="text-xs">{task.timeSpent}</span>
+                        )}
                       </div>
-                      {task.commits !== undefined && (
-                        <div className="flex items-center gap-1 text-gray-400">
-                          <GitBranch className="w-3 h-3" />
-                          <span className="text-xs">{task.commits}</span>
+                      <p className="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">{developer.statusMessage}</p>
+
+                      {/* Click indicator */}
+                      <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <p className="text-xs text-purple-400 flex items-center gap-1">
+                          <Brain className="w-3 h-3" />
+                          Click for detailed AI insights
+                        </p>
+                      </div>
+
+                      {/* LLM Insights Display */}
+                      {llmEnabled && showLLMInsights && developer.llmInsights && (
+                        <div className="mt-3 p-3 bg-purple-950/30 border border-purple-800/30 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-medium text-purple-300">AI Insights</span>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
+                                {developer.llmInsights.mood}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs bg-purple-900/50 text-purple-200 border-purple-700">
+                                {developer.llmInsights.productivity}
+                              </Badge>
+                            </div>
+                          </div>
+
+                          {developer.llmInsights.keyTopics.length > 0 && (
+                            <div className="mb-2">
+                              <p className="text-xs text-gray-400 mb-1">Key Topics:</p>
+                              <div className="flex gap-1 flex-wrap">
+                                {developer.llmInsights.keyTopics.map((topic, index) => (
+                                  <Badge key={index} variant="secondary" className="text-xs bg-gray-800 text-gray-300">
+                                    {topic}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {developer.llmInsights.recommendations && developer.llmInsights.recommendations.length > 0 && (
+                            <div>
+                              <p className="text-xs text-gray-400 mb-1">Recommendations:</p>
+                              <p className="text-xs text-purple-200">
+                                {developer.llmInsights.recommendations[0]}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      {task.pullRequests !== undefined && task.pullRequests > 0 && (
-                        <Badge variant="outline" className="text-xs bg-green-500/10 text-green-400 border-green-500/20">
-                          {task.pullRequests}
-                        </Badge>
-                      )}
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <MessageSquare className="w-4 h-4" />
+                      <span className="text-sm">{developer.completedTasks}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <GitBranch className="w-4 h-4" />
+                      <span className="text-sm">{developer.totalTasks}</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {developer.completedTasks} tasks
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {developer.currentTasks.map((task) => (
+                    <TaskDetailModal
+                      key={task.id}
+                      task={task}
+                      developer={developer}
+                      conversations={modalConversations}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          }
+        />
       ))}
 
       {/* Last Updated */}

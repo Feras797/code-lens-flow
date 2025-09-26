@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { SimpleLLMAnalysis, type LLMAnalysisResult, type ConversationData } from '../services/simpleLLMAnalysis'
+import { SimpleLLMAnalysis, type LLMAnalysisResult, type ConversationData, type DetailedLLMInsights } from '../services/simpleLLMAnalysis'
 
 export interface SimpleLLMOptions {
   enabled: boolean
@@ -64,8 +64,44 @@ export function useSimpleLLMAnalysis() {
     return cached ? Date.now() - cached.timestamp < 15 * 60 * 1000 : false
   }, [cache])
 
+  const generateDetailedInsights = useCallback(async (
+    userId: string,
+    conversations: ConversationData[],
+    options: { cacheMinutes?: number } = {}
+  ): Promise<DetailedLLMInsights | null> => {
+    // Check cache first
+    const cacheKey = `detailed_${userId}_${JSON.stringify(conversations.slice(0, 3).map(c => c.id))}`
+    const cached = cache.get(cacheKey)
+    if (cached && Date.now() - cached.timestamp < (options.cacheMinutes || 30) * 60 * 1000) {
+      return cached.data
+    }
+
+    setIsAnalyzing(true)
+    setError(null)
+
+    try {
+      const insights = await analysisService.generateDetailedInsights(userId, conversations)
+
+      // Cache results for longer period since detailed analysis is expensive
+      setCache(prev => new Map(prev).set(cacheKey, {
+        data: insights,
+        timestamp: Date.now()
+      }))
+
+      return insights
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Detailed analysis failed'
+      setError(errorMessage)
+      console.error('Detailed LLM analysis error:', err)
+      return null
+    } finally {
+      setIsAnalyzing(false)
+    }
+  }, [analysisService, cache])
+
   return {
     analyzeConversations,
+    generateDetailedInsights,
     isAnalyzing,
     error,
     clearCache,
