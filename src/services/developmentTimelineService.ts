@@ -323,3 +323,4 @@ Project: ${log.project_name}
 
 // Export singleton instance
 export const timelineService = new DevelopmentTimelineService()
+

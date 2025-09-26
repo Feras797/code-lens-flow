@@ -780,3 +780,4 @@ export function DevelopmentTimeline({
 
 // Import Supabase client for LLM analysis
 import { supabase } from '@/lib/supabase'
+

@@ -640,3 +640,4 @@ function generateFallbackInsights(task: DeveloperTask): TaskInsights {
     confidence: 0.6
   }
 }
+

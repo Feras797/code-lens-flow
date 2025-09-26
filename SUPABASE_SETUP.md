@@ -62,8 +62,8 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 1. Go to **Authentication → Settings**
 2. Configure the following:
-   - **Site URL**: `http://localhost:5173` (for development)
-   - **Redirect URLs**: Add `http://localhost:5173/*`
+   - **Site URL**: use the origin users should see after confirming email (e.g. `http://localhost:5173` in development, `https://code-lens-flow.vercel.app/` in production)
+   - **Redirect URLs**: add every domain you allow Supabase to redirect to (must include `https://code-lens-flow.vercel.app/` and any other permitted origins)
    - **Email Auth**: Enable email/password authentication
    - **Email Templates**: Customize if needed
 
