@@ -1,10 +1,12 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   Settings,
   HelpCircle,
   LogOut,
-  User
+  User,
+  Brain,
+  Users
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -19,6 +21,7 @@ import { Button } from '@/components/ui/button'
 
 function AppLayout() {
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   const handleSignOut = async () => {
     await signOut()
@@ -53,6 +56,28 @@ function AppLayout() {
 
             {/* Right side - User menu and actions */}
             <div className="flex items-center gap-4">
+              {/* Team Status Board Button */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="gap-2 text-green-400 hover:text-green-300"
+                onClick={() => navigate('/team-status-board')}
+              >
+                <Users className="h-4 w-4" />
+                <span className="hidden sm:inline">Team Status</span>
+              </Button>
+
+              {/* AI Analysis Button */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="gap-2 text-purple-400 hover:text-purple-300"
+                onClick={() => navigate('/ai-analysis')}
+              >
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Analysis</span>
+              </Button>
+
               {/* Help Button */}
               <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
                 <HelpCircle className="h-4 w-4" />

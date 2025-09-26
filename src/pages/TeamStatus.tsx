@@ -1,9 +1,18 @@
-import { Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp } from 'lucide-react'
+import { Users, Clock, FileCode, GitPullRequest, Activity, MessageSquare, GitBranch, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRubeTeamStatusOptimized } from '@/hooks/useRubeTeamStatusOptimized'
+import { useProject } from '@/contexts/ProjectContext'
 
 function TeamStatus () {
   const [expandedDevs, setExpandedDevs] = useState<Set<number>>(new Set([1, 2])) // Default expand first two developers
+  const [autoRefresh, setAutoRefresh] = useState(true)
+
+  // Get real data from Supabase
+  const { teamStatus, isLoading, error, lastUpdated, refresh, forceRefresh, cacheStatus } = useRubeTeamStatusOptimized()
+
+  // Get current project context
+  const { currentProject } = useProject()
 
   interface WorkItem {
     id: string
@@ -27,7 +36,37 @@ function TeamStatus () {
     currentContext: string
   }
 
-  const developers: Developer[] = [
+  // Transform real Supabase data to existing component format
+  const transformTeamStatusToDevelopers = () => {
+    if (!teamStatus || teamStatus.length === 0) {
+      return mockDevelopers // Fallback to mock data
+    }
+
+    return teamStatus.map((dev, index) => ({
+      id: index + 1, // Convert string ID to number for existing component
+      name: dev.name,
+      avatar: dev.initials,
+      status: dev.status === 'problem_solving' ? 'slow' :
+              dev.status === 'blocked' ? 'stuck' :
+              'flow' as 'flow' | 'slow' | 'stuck',
+      workItems: dev.currentTasks.map(task => ({
+        id: task.id,
+        task: task.title,
+        file: task.filePath,
+        duration: task.timeSpent,
+        messages: task.messages || 0,
+        commits: task.commits || 0,
+        chatContext: task.description,
+        priority: task.status
+      })),
+      totalMessages: dev.currentTasks.reduce((sum, task) => sum + (task.messages || 0), 0),
+      totalCommits: dev.completedTasks,
+      currentContext: dev.statusMessage
+    }))
+  }
+
+  // Mock data for fallback
+  const mockDevelopers: Developer[] = [
     {
       id: 1,
       name: 'Sarah Chen',
@@ -234,6 +273,20 @@ function TeamStatus () {
     }
   ]
 
+  // Use real data or fallback to mock data
+  const developers = transformTeamStatusToDevelopers()
+
+  // Auto-refresh effect
+  useEffect(() => {
+    if (!autoRefresh) return
+
+    const interval = setInterval(() => {
+      refresh()
+    }, 30000) // Refresh every 30 seconds
+
+    return () => clearInterval(interval)
+  }, [autoRefresh, refresh])
+
   const toggleDeveloper = (devId: number) => {
     const newExpanded = new Set(expandedDevs)
     if (newExpanded.has(devId)) {
@@ -295,18 +348,54 @@ function TeamStatus () {
             Real-time visibility into what every developer is working on, extracted from Claude Code conversations
           </p>
         </div>
-        <button className='px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors'>
-          Auto-refresh
-        </button>
+        <div className="flex items-center gap-2">
+          {error && (
+            <div className="text-red-400 text-sm flex items-center gap-2">
+              <span className="text-xs">Error loading data</span>
+            </div>
+          )}
+          <button
+            onClick={forceRefresh}
+            disabled={isLoading}
+            className='px-3 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-colors disabled:opacity-50 flex items-center gap-2'
+          >
+            <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
+            Refresh
+          </button>
+          <button
+            onClick={() => setAutoRefresh(!autoRefresh)}
+            className={cn(
+              'px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2',
+              autoRefresh
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary text-secondary-foreground'
+            )}
+          >
+            <RefreshCw className={cn("h-4 w-4", autoRefresh && "animate-spin")} />
+            {autoRefresh ? 'Auto-refresh ON' : 'Auto-refresh OFF'}
+          </button>
+        </div>
       </div>
 
+
+      {/* Loading State */}
+      {isLoading && developers.length === 0 && (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground">Loading team status data...</p>
+          </div>
+        </div>
+      )}
 
       {/* Header with Status Explainers */}
       <div className='space-y-6'>
         {/* Header Section with Title and Status Explainers */}
         <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6'>
           <div>
-            <h2 className='text-lg font-semibold text-foreground'>TEAM STATUS - E-Commerce Platform</h2>
+            <h2 className='text-lg font-semibold text-foreground'>
+              TEAM STATUS - {currentProject?.name || 'Current Project'}
+            </h2>
           </div>
 
           <div className='flex flex-col sm:flex-row gap-4'>

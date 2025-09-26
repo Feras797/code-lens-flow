@@ -144,7 +144,7 @@ export function PersonalInsights() {
           
           <Accordion type="multiple" defaultValue={["morning", "afternoon"]} className="w-full">
             <AccordionItem value="morning" className="border-b border-border/30">
-              <AccordionTrigger className="hover:text-foreground transition-colors py-3">
+              <AccordionTrigger className="hover:no-underline py-3">
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs bg-status-flow-bg/30 text-status-flow border-status-flow/20">
                     Morning
@@ -166,7 +166,7 @@ export function PersonalInsights() {
             </AccordionItem>
 
             <AccordionItem value="afternoon" className="border-b border-border/30">
-              <AccordionTrigger className="hover:text-foreground transition-colors py-3">
+              <AccordionTrigger className="hover:no-underline py-3">
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs bg-status-slow-bg/30 text-status-slow border-status-slow/20">
                     Afternoon
@@ -188,7 +188,7 @@ export function PersonalInsights() {
             </AccordionItem>
 
             <AccordionItem value="decisions" className="border-b border-border/30">
-              <AccordionTrigger className="hover:text-foreground transition-colors py-3">
+              <AccordionTrigger className="hover:no-underline py-3">
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs bg-status-flow-bg/30 text-status-flow border-status-flow/20">
                     Key Decisions
@@ -209,7 +209,7 @@ export function PersonalInsights() {
             </AccordionItem>
 
             <AccordionItem value="abandoned" className="border-0">
-              <AccordionTrigger className="hover:text-foreground transition-colors py-3">
+              <AccordionTrigger className="hover:no-underline py-3">
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs bg-status-blocked-bg/30 text-status-blocked border-status-blocked/20">
                     Abandoned
@@ -267,7 +267,7 @@ export function PersonalInsights() {
                     {/* Event content */}
                     <div className="flex-1 min-w-0">
                       <StealthCard 
-                        className="p-4 border-l-3 hover:shadow-md transition-all cursor-pointer" 
+                        className="p-4 border-l-3 transition-colors" 
                         style={{
                           borderLeftColor: event.impact === 'high' 
                             ? 'hsl(var(--status-flow) / 0.8)'

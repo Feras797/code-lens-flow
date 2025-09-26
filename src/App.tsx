@@ -11,6 +11,7 @@ import ProjectSelector from './pages/ProjectSelector'
 import AppLayout from './components/layouts/AppLayout'
 import ProjectLayout from './components/layouts/ProjectLayout'
 import { Login } from './components/auth/Login'
+import { MinimalAIAnalysis } from './components/MinimalAIAnalysis'
 
 function AppContent () {
   const { session, loading } = useAuth()
@@ -38,6 +39,7 @@ function AppContent () {
       {/* App-level routes (with sidebar) */}
       <Route path="/" element={<AppLayout />}>
         <Route path="projects" element={<ProjectSelector />} />
+        <Route path="ai-analysis" element={<MinimalAIAnalysis />} />
       </Route>
 
       {/* Project-specific routes (with top navigation) */}
